@@ -1,0 +1,3805 @@
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x000,SPI_INTFCONFA,7,SOFTRESET_M,,Soft reset (mirror). Set this bit to mirror Bit 0.,0x0,R
+"",,6,LSBFIRST_M,,LSB first (mirror). Set this bit to mirror Bit 1.,0x0,R
+"",,5,ADDRINC_M,,Address increment (mirror). Set this bit to,0x0,R
+"",,,,,mirror Bit 2.,,
+"",,4,SDOACTIVE_M,,SDO active (mirror). Set this bit to mirror Bit 3.,0x0,R
+"",,3,SDOACTIVE,,SDO active. Enables 4-wire SPI bus mode.,0x0,R/W
+"",,2,ADDRINC,,"Address increment. When set, this bit",0x0,R/W
+"",,,,,causes incrementing streaming addresses;,,
+"",,,,,"otherwise, descending addresses are",,
+"",,,,,generated.,,
+"",,,,1,Streaming addresses are incremented.,,
+"",,,,0,Streaming addresses are decremented.,,
+"",,1,LSBFIRST,,"LSB first. When set, this bit causes SPI input",0x0,R/W
+"",,,,,and output data to be oriented as LSB first.,,
+"",,,,,"If this bit is clear, data is oriented as MSB first.",,
+"",,,,1,Shift LSB in first.,,
+"",,,,0,Shift MSB in first.,,
+"",,0,SOFTRESET,,Soft reset. This bit automatically clears to 0,0x0,R/W
+"",,,,,after performing a reset operation. Setting,,
+"",,,,,this bit initiates a reset. This bit autoclears,,
+"",,,,,after the soft reset is complete.,,
+"",,,,1,Pulse the soft reset line.,,
+"",,,,0,Reset the soft reset line.,,
+0x001,SPI_INTFCONFB,7,SINGLEINS,,Single instruction.,0x0,R/W
+"",,,,1,Perform single transfers.,,
+"",,,,0,Perform multiple transfers.,,
+"",,6,CSSTALL,,CS stalling.,0x0,R/W
+"",,,,0,Disable CS stalling.,,
+"",,,,1,Enable CS stalling.,,
+"",,[5:0],RESERVED,,Reserved.,0x0,R/W
+0x003,SPI_CHIPTYPE,[7:0],CHIP_TYPE,,Chip type.,0x4,R
+0x004,SPI_PRODIDL,[7:0],PROD_ID[7:0],,Product ID. Updated once the bootloader,0x72,R
+"",,,,,completes,,
+0x005,SPI_PRODIDH,[7:0],PROD_ID[15:8],,Product ID. Updated once the bootloader,0x91,R
+"",,,,,completes,,
+0x006,SPI_CHIPGRADE,[7:4],PROD_GRADE,,Product grade.,0x0,R
+"",,[3:0],DEV_REVISION,,Device revision.,0x4,R
+0x008,SPI_PAGEINDX,[7:6],MAINDAC_PAGE,,Sets the main DAC paging. Each high bit in,0x3,R/W
+"",,,,,this field pages a DAC starting at the LSB.,,
+"",,,,,Both main DACs can be paged and,,
+"",,,,,programmed at the same time if desired.,,
+"",,[5:0],CHANNEL_PAGE,,Sets channel paging. Each high bit in this,0x3F,R/W
+"",,,,,field pages a complex channel starting at,,
+"",,,,,the LSB. Multiple channels can be paged,,
+"",,,,,and programmed at a time if desired.,,
+0x00A,SPI_SCRATCHPAD,[7:0],SCRATCHPAD,,Scratch pad read/write register.,0x0,R/W
+0x010,CHIP_ID_L,[7:0],CHIP_ID[7:0],,Chip ID serial number.,0x0,R
+0x011,CHIP_ID_M1,[7:0],CHIP_ID[15:8],,Chip ID serial number.,0x0,R
+0x012,CHIP_ID_M2,[7:0],CHIP_ID[23:16],,Chip ID serial number.,0x0,R
+0x013,CHIP_ID_H,[7:0],CHIP_ID[31:24],,Chip ID serial number.,0x0,R
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x020,IRQ_ENABLE,[7:5],RESERVED,,Reserved.,0x0,R
+"",,4,EN_SYSREF_JITTER,,Enable SYSREF± jitter interrupt.,0x0,R/W
+"",,3,EN_DATA_READY,,Enable JESD204B receiver ready,0x0,R/W
+"",,,,,(JRX_DATA_READY) low interrupt.,,
+"",,2,EN_LANE_FIFO,,Enable lane FIFO overflow/underflow,0x0,R/W
+"",,,,,interrupt.,,
+"",,1,EN_PRBSQ,,Enable PRBS imaginary error interrupt.,0x0,R/W
+"",,0,EN_PRBSI,,Enable PRBS real error interrupt.,0x0,R/W
+0x021,IRQ_ENABLE0,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,EN_DAC0_CAL_,,Enable DAC0 calibration complete interrupt.,0x0,R/W
+"",,,DONE,,,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,EN_PAERR0,,Enable PA protection error interrupt for,0x0,R/W
+"",,,,,DAC0.,,
+0x022,IRQ_ENABLE1,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,EN_DAC1_CAL_,,Enable DAC1 calibration complete interrupt.,0x0,R/W
+"",,,DONE,,,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,EN_PAERR1,,Enable PA protection error interrupt for,0x0,R/W
+"",,,,,DAC1.,,
+0x023,IRQ_ENABLE2,[7:6],RESERVED,,Reserved.,0x0,R
+"",,5,EN_DLL_LOST,,Enable DLL lock lost interrupt.,0x0,R/W
+"",,4,EN_DLL_LOCK,,Enable DLL lock interrupt.,0x0,R/W
+"",,[3:2],RESERVED,,Reserved.,0x0,R/W
+"",,1,EN_PLL_LOST,,Enable PLL lock lost interrupt.,0x0,R/W
+"",,0,EN_PLL_LOCK,,Enable PLL lock interrupt.,0x0,R/W
+0x024,IRQ_STATUS,[7:5],RESERVED,,Reserved.,0x0,R
+"",,4,IRQ_SYSREF_JITTER,,SYSREF± jitter too large. If EN_SYSREF_JITTER,0x0,R/W
+"",,,,,"is low, IRQ_SYSREF_JITTER shows the current",,
+"",,,,,"status. If EN_SYSREF_JITTER is high, IRQ_",,
+"",,,,,SYSREF_JITTER latches and pulls the IRQx pin,,
+"",,,,,low (x = the MUX_SYSREF_JITTER setting).,,
+"",,,,,Writing a 1 to IRQ_SYSREF_JITTER when,,
+"",,,,,latched clears the bit.,,
+"",,3,IRQ_DATA_READY,,JESD204x receiver data ready is low. If,0x0,R/W
+"",,,,,"EN_DATA_READY is low, IRQ_DATA_READY",,
+"",,,,,shows the current status. If EN_DATA_,,
+"",,,,,"READY is high, IRQ_DATA_READY latches",,
+"",,,,,and pulls the IRQx pin low (x = MUX_,,
+"",,,,,DATA_READY setting). Writing a 1 to IRQ_,,
+"",,,,,DATA_READY when latched clears the bit.,,
+"",,2,IRQ_LANE_FIFO,,Lane FIFO overflow/underflow. If EN_,0x0,R/W
+"",,,,,"LANE_FIFO is low, IRQ_LANE_FIFO shows",,
+"",,,,,the current status. If EN_LANE_FIFO is,,
+"",,,,,"high, IRQ_LANE_FIFO latches and pulls the",,
+"",,,,,IRQx pin low (x = MUX_LANE_FIFO,,
+"",,,,,setting). Writing a 1 to IRQ_LANE_FIFO,,
+"",,,,,when latched clears the bit.,,
+"",,1,IRQ_PRBSQ,,"DAC1 PRBS error. If EN_PRBSQ is low,",0x0,R/W
+"",,,,,IRQ_PRBSQ shows the current status. If,,
+"",,,,,"EN_PRBSQ is high, IRQ_PRBSQ latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_PRBSQ,,
+"",,,,,setting). Writing a 1 to IRQ_PRBSQ when,,
+"",,,,,latched clears the bit.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,0,IRQ_PRBSI,,"DAC0 PRBS error. If EN_PRBSI is low, IRQ_",0x0,R/W
+"",,,,,PRBSI shows the current status. If EN_,,
+"",,,,,"PRBSI is high, IRQ_PRBSI latches and pulls",,
+"",,,,,the IRQx pin low (x = MUX_PRBSI setting).,,
+"",,,,,Writing a 1 to IRQ_PRBSI when latched,,
+"",,,,,clears the bit.,,
+0x025,IRQ_STATUS0,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,IRQ_DAC0_CAL_,,DAC0 calibration done. If EN_DAC0_CAL_,0x0,R/W
+"",,,DONE,,"DONE is low, IRQ_DAC0_CAL_DONE shows",,
+"",,,,,the current status. If EN_DAC0_CAL_DONE,,
+"",,,,,"is high, IRQ_DAC0_CAL_DONE latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_DAC0_,,
+"",,,,,CAL_DONE setting). Writing a 1 to IRQ_,,
+"",,,,,DAC0_CAL_DONE when latched clears the,,
+"",,,,,bit.,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,IRQ_PAERR0,,"DAC0 PA error. If EN_PAERR0 is low, IRQ_",0x0,R/W
+"",,,,,PAERR0 shows the current status. If EN_,,
+"",,,,,"PAERR0 is high, IRQ_PAERR0 latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_PAERR0,,
+"",,,,,setting). Writing a 1 to IRQ_PAERR0 when,,
+"",,,,,latched clears the bit.,,
+0x026,IRQ_STATUS1,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,IRQ_DAC1_CAL_,,DAC1 calibration done. If EN_DAC0_CAL_,0x0,R/W
+"",,,DONE,,"DONE is low, IRQ_DAC1_CAL_DONE shows",,
+"",,,,,the current status. If EN_DAC1_CAL_DONE,,
+"",,,,,"is high, IRQ_DAC1_CAL_DONE latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_DAC1_,,
+"",,,,,CAL_DONE setting). Writing a 1 to IRQ_,,
+"",,,,,DAC1_CAL_DONE when latched clears the,,
+"",,,,,bit.,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,IRQ_PAERR1,,"DAC1 PA error. If EN_PAERR1 is low, IRQ_",0x0,R/W
+"",,,,,PAERR1 shows the current status. If EN_,,
+"",,,,,"PAERR1 is high, IRQ_PAERR1 latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_PAERR1,,
+"",,,,,setting). Writing a 1 to IRQ_PAERR1 when,,
+"",,,,,latched clears the bit.,,
+0x027,IRQ_STATUS2,[7:6],RESERVED,,Reserved.,0x0,R
+"",,5,IRQ_DLL_LOST,,"DLL lost. If EN_DLL_LOST is low, IRQ_DLL_",0x0,R/W
+"",,,,,LOST shows the current status. If EN_DLL_,,
+"",,,,,"LOST is high, IRQ_DLL_LOST latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_DLL_LOST,,
+"",,,,,setting). Writing a 1 to IRQ_DLL_LOST,,
+"",,,,,when latched clears the bit.,,
+"",,4,IRQ_DLL_LOCK,,"DLL locked. If EN_DLL_LOCK is low, IRQ_",0x0,R/W
+"",,,,,DLL_LOCK shows current status. If EN_DLL_,,
+"",,,,,"LOCK is high, IRQ_DLL_LOCK latches and",,
+"",,,,,pulls the IRQx pin low (x = MUX_DLL_LOCK,,
+"",,,,,setting). Writing a 1 to IRQ_DLL_LOCK when,,
+"",,,,,latched clears the bit.,,
+"",,[3:2],RESERVED,,Reserved.,0x0,R/W
+"",,1,IRQ_PLL_LOST,,"DAC PLL lock lost. If EN_PLL_LOST is low,",0x0,R/W
+"",,,,,IRQ_PLL_LOST shows the current status. If,,
+"",,,,,"EN_PLL_LOST is high, IRQ_PLL_LOST latches",,
+"",,,,,and pulls the IRQx pin low (x = MUX_PLL_,,
+"",,,,,LOST setting). Writing a 1 to IRQ_PLL_,,
+"",,,,,LOST when latched clears the bit.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,0,IRQ_PLL_LOCK,,"DAC PLL locked. If EN_PLL_LOCK is low, IRQ_",0x0,R/W
+"",,,,,PLL_LOCK shows the current status. If EN_,,
+"",,,,,"PLL_LOCK is high, IRQ_PLL_LOCK latches",,
+"",,,,,and pulls the IRQx pin low (x = MUX_PLL_,,
+"",,,,,LOCK setting). Writing a 1 to IRQ_PLL_LOCK,,
+"",,,,,when latched clears the bit.,,
+0x028,IRQ_OUTPUT_MUX,[7:5],RESERVED,,Reserved.,0x0,R
+"",,4,MUX_SYSREF_,,"If EN_SYSREF_JITTER is set, this control",0x0,R/W
+"",,,JITTER,,chooses the IRQx output pin on which the,,
+"",,,,,event is triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,3,MUX_DATA_READY,,"If EN_DATA_READY is set, this control",0x0,R/W
+"",,,,,chooses the IRQx output pin on which the,,
+"",,,,,event is triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,2,MUX_LANE_FIFO,,"If EN_LANE_FIFO is set, this control chooses",0x0,R/W
+"",,,,,the IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,1,MUX_PRBSQ,,"If EN_PRBSQ is set, this control chooses the",0x0,R/W
+"",,,,,IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,0,MUX_PRBSI,,"If EN_PRBSI is set, this control chooses the",0x0,R/W
+"",,,,,IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+0x029,IRQ_OUTPUT_MUX0,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,MUX_DAC0_CAL_,,"If EN_DAC0_CAL_DONE is set, this control",0x0,R/W
+"",,,DONE,,chooses the IRQx output pin on which the,,
+"",,,,,event is triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,MUX_PAERR0,,"If EN_PAERR0 is set, this control chooses",0x0,R/W
+"",,,,,the IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+0x02A,IRQ_OUTPUT_MUX1,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,MUX_DAC1_CAL_,,"If EN_DAC1_CAL_DONE is set, this control",0x0,R/W
+"",,,DONE,,chooses the IRQx output pin on which the,,
+"",,,,,event is triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R/W
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,0,MUX_PAERR1,,"If EN_PAERR1 is set, this control chooses",0x0,R/W
+"",,,,,the IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+0x02B,IRQ_OUTPUT_MUX2,[7:6],RESERVED,,Reserved.,0x0,R
+"",,5,MUX_DLL_LOST,,"If EN_DLL_LOST is set, this control chooses",0x0,R/W
+"",,,,,the IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,4,MUX_DLL_LOCK,,"If EN_DLL_LOCK is set, this control chooses",0x0,R/W
+"",,,,,the IRQx output pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,[3:2],RESERVED,,Reserved.,0x0,R/W
+"",,1,MUX_PLL_LOST,,"If EN_PLL_LOST is set, this control chooses",0x0,R/W
+"",,,,,the IRQx pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+"",,0,MUX_PLL_LOCK,,"If EN_PLL_LOCK is set, this control chooses",0x0,R/W
+"",,,,,the IRQx pin on which the event is,,
+"",,,,,triggered.,,
+"",,,,0,Route IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route IRQ trigger signal to the IRQ1 pin.,,
+0x02C,IRQ_STATUS_ALL,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,IRQ_STATUS_ALL,,This bit is an OR of all the bits in,0x0,R/W
+"",,,,,Register 0x24 to Register 0x27. Writing a,,
+"",,,,,one to this bit clears any latched IRQx,,
+"",,,,,signals in Register 0x24 to Register 0x27.,,
+0x036,SYSREF_COUNT,[7:0],SYSREF_COUNT,,Number of rising SYSREF± edges to ignore,0x0,R/W
+"",,,,,before synchronization (pulse counting,,
+"",,,,,mode).,,
+0x039,SYSREF_ERR_,7,RESERVED,,Reserved.,0x0,R
+"",WINDOW,[6:0],SYSREF_ERR_,,Amount of jitter allowed on the SYSREF±,0x0,R/W
+"",,,WINDOW,,input. SYSREF± jitter variations larger than,,
+"",,,,,this trigger an interrupt. Units are in DAC,,
+"",,,,,clocks.,,
+0x03A,SYSREF_MODE,[7:5],RESERVED,,Reserved.,0x0,R
+"",,4,SYNC_ROTATION_,,Synchronization logic rotation complete flag.,0x1,R
+"",,,DONE,,,,
+"",,[3:2],RESERVED,,Reserved.,0x0,R
+"",,1,SYSREF_MODE_,,Enable one-shot synchronization rotation,0x0,R/W
+"",,,ONESHOT,,mode.,,
+"",,,,00,Monitor mode. Status/error flag for IRQ_,,
+"",,,,,SYSREF_JITTER is 1 if the SYSREF± edge is,,
+"",,,,,"outside the error window (Register 0x039,",,
+"",,,,,Bits[6:0]).,,
+"",,,,01,Perform a single synchronization on the next,,
+"",,,,,"SYSREF±, then switch to monitor mode.",,
+"",,0,RESERVED,,Reserved.,0x0,R/W
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x03B,ROTATION_MODE,7,SYNCLOGIC_EN,,This bit must always be set to 1 (default) for,0x1,R/W
+"",,,,,both Subclass 0 and Subclass 1 operations.,,
+"",,6,RESERVED,,"Reserved. For proper operation, write this",0x0,R/W
+"",,,,,bit to a 1.,,
+"",,5,PERIODIC_RST_EN,,Synchronization required setting. Always,0x1,R/W
+"",,,,,set this bit to 1 for both Subclass 0 and,,
+"",,,,,Subclass 1 operation.,,
+"",,4,NCORST_AFTER_,,Set this bit to 1 to reset all NCOs after digital,0x1,R/W
+"",,,ROT_EN,,reset or synchronization rotation. Either this,,
+"",,,,,control or the START_NCO_SYNC bit,,
+"",,,,,"(Register 0x1E7, Bit 0) can be used to reset",,
+"",,,,,all the NCOs (main and channel,,
+"",,,,,datapaths).,,
+"",,[3:2],RESERVED,,Reserved.,0x0,R
+"",,[1:0],ROTATION_MODE,,Selects the circuitry to be reset when a,0x0,R/W
+"",,,,,synchronization rotation occurs. Certain,,
+"",,,,,bits being set to 1 determine the actions,,
+"",,,,,taken when a synchronization rotation is,,
+"",,,,,performed. Bit 0 corresponds to a SERDES,,
+"",,,,,clock reset and realignment. Bit 1 corres-,,
+"",,,,,"ponds to a datapath soft off/on gain, which",,
+"",,,,,must only be used if PA protection is in use. If,,
+"",,,,,"PA protection is not used, set Bit 1 to 0.",,
+"",,,,0,"No action, with either the SERDES clocks or",,
+"",,,,,"the datapath, occurs when a synchro-",,
+"",,,,,nization rotation occurs.,,
+"",,,,1,The links drop and the SERDES clocks are,,
+"",,,,,reset. It is recommended to set this bit high,,
+"",,,,,so that when a synchronization rotation is,,
+"",,,,,"performed, the SERDES clocks realign",,
+"",,,,,properly.,,
+"",,,,10,The datapath automatically uses the soft,,
+"",,,,,on/off functionality to turn on and off the,,
+"",,,,,datapath stream during a synchronization,,
+"",,,,,rotation to avoid corrupted data from,,
+"",,,,,being transmitted. Only use this feature if,,
+"",,,,,the PA protection block is in use.,,
+"",,,,11,Both the SERDES clock reset and datapath,,
+"",,,,,soft on/off feature are enabled.,,
+0x03F,TX_ENABLE,[7:6],RESERVED,,Reserved.,0x0,R/W
+"",,5,TXEN_DATAPATH_,,Selects whether the datapath of DAC1 is,0x0,R/W
+"",,,DAC1,,muted when the TXEN1 pin is brought low.,,
+"",,,,0,Datapath output is normal.,,
+"",,,,1,"If TXEN1 = 0, the datapath output is",,
+"",,,,,"immediately zeroed. If TXEN1 = 1, the",,
+"",,,,,datapath outputs normal operation.,,
+"",,4,TXEN_DATAPATH_,,Selects whether the datapath of DAC0 is,0x0,R/W
+"",,,DAC0,,muted when the TXEN0 pin is brought low.,,
+"",,,,0,Datapath output is normal.,,
+"",,,,1,"If TXEN0 = 0, the datapath output is",,
+"",,,,,"immediately zeroed. If TXEN0 = 1, the",,
+"",,,,,datapath outputs normal operation.,,
+"",,[3:0],RESERVED,,Reserved.,0x0,R/W
+0x050,CAL_CLK_DIV,[7:4],RESERVED,,Reserved,0x2,R/W
+"",,[3:0],CAL_CLK_DIV,,Calibration register control. Set these bits,0x8,R/W
+"",,,,,to 0xA for optimized calibration setting.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x051,CAL_CTRL,7,CAL_CTRL0,,Calibration setting. Set this bit to 1.,0x1,R/W
+"",,,,0,Reset the calibration engine.,,
+"",,,,1,Enable the calibration routine.,,
+"",,[6:3],RESERVED,,Reserved.,0x0,R/W
+"",,[2:1],CAL_CTRL1,,Calibration mode selection. Set this bit,0x1,R/W
+"",,,,,field to 1 for optimized calibration mode.,,
+"",,,,,Paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,1,Set calibration control setting.,,
+"",,0,CAL_START,,"Start calibration. After starting calibration, do",0x0,R/W
+"",,,,,not write to any register from Register 0x051,,
+"",,,,,"to Register 0x061 until Register 0x052, Bit",,
+"",,,,,2 reads low (indicating that the calibration,,
+"",,,,,is no longer active). Paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+0x052,CAL_STAT,[7:3],RESERVED,,Reserved.,0x0,R/W
+"",,2,CAL_ACTIVE,,Calibration active status flag. A readback,0x0,R
+"",,,,,of 1 indicates the calibration routine is still,,
+"",,,,,in progress. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+"",,1,CAL_FAIL_SEARCH,,Calibration failure flag. A readback of 1,0x0,R
+"",,,,,indicates the calibration routine failed and is,,
+"",,,,,possibly not valid. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+"",,0,CAL_FINISH,,Calibration complete flag. A readback of 1,0x0,R
+"",,,,,indicates the calibration completed. This,,
+"",,,,,control is paged by the MAINDAC_PAGE,,
+"",,,,,bits in Register 0x008.,,
+0x05A,FSC1,[7:0],FSC_CTRL[7:0],,Sets the full-scale (maximum) current that,0x28,R/W
+"",,,,,is available from the DACx analog outputs.,,
+"",,,,,This control is paged by the MAINDAC_,,
+"",,,,,PAGE bits in Register 0x008. Full-scale,,
+"",,,,,current = 15.625 mA + FSC_CTRL ×,,
+"",,,,,(25/256) (mA).,,
+0x061,CAL_DEBUG0,7,RESERVED,,Reserved.,0x0,R/W
+"",,6,CAL_CTRL2,,Calibration control. Set this bit to 1 for,0x1,R/W
+"",,,,,optimized calibration setting.,,
+"",,5,CAL_CTRL3,,Calibration control. Set this bit to 1 for,0x1,R/W
+"",,,,,optimized calibration setting.,,
+"",,4,RESERVED,,Reserved.,0x0,R/W
+"",,3,CAL_CTRL4,,Calibration control. Set this bit to 1 for,0x0,R/W
+"",,,,,optimized calibration setting.,,
+"",,[2:0],RESERVED,,Reserved.,0x0,R/W
+0x081,CLK_CTRL,[7:2],RESERVED,,Reserved.,0x0,R/W
+"",,1,CAL_CLK_PD1,,After the calibration is complete for DAC1,0x0,R/W
+"",,,,,"(Register 0x052, Bit 0 = 1), set this bit high",,
+"",,,,,to power down the calibration clock.,,
+"",,0,CAL_CLK_PD0,,After the calibration is complete for DAC0,0x0,R/W
+"",,,,,"(Register 0x052, Bit 0 = 1), set this bit high",,
+"",,,,,to power down the calibration clock.,,
+0x083,NVM_CTRL0,7,NVM_CTRL0A,,NVM register control for the ring oscillator.,0x0,R/W
+"",,[6:2],RESERVED,,Reserved.,0x0,R
+"",,[1:0],NVM_CTRL0B,,NVM register control for the ring oscillator.,0x2,R/W
+"",,,,00,Divide by 8.,,
+"",,,,01,Divide by 16.,,
+"",,,,10,Divide by 32.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x084,SYSREF_CTRL,7,RESERVED,,Reserved.,0x0,R/W
+"",,6,SYSREF_,,Sets the input mode type for the SYSREF±,0x0,R/W
+"",,,INPUTMODE,,pins.,,
+"",,,,0,AC couple SYSREF±.,,
+"",,,,1,DC couple SYSREF±.,,
+"",,[5:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,SYSREF_PD,,Power down the SYSREF± receiver and,0x0,R/W
+"",,,,,"synchronization circuitry. If using Subclass 0,",,
+"",,,,,set this bit to 1 because the SYSREF± pins,,
+"",,,,,are not used.,,
+"",,,,0,SYSREF± receiver is powered on.,,
+"",,,,1,SYSREF± receiver is powered down.,,
+0x085,NVM_CTRL1,7,RESERVED,,Reserved.,0x0,R
+"",,[6:4],NVM_CTRL1A,,NVM control. Set this control to 1 at the start,0x1,R/W
+"",,,,,of the configuration sequence (as shown,,
+"",,,,,in the Start-Up Sequence section) and set,,
+"",,,,,to 0 at the end of the start-up routine,,
+"",,,,,when no longer programming the device.,,
+"",,[3:2],RESERVED,,Reserved.,0x0,R
+"",,1,NVM_CTRL1B,,NVM control. Set this control to 1 at the start,0x1,R/W
+"",,,,,of the configuration sequence (as shown in,,
+"",,,,,the Start-Up Sequence section) and set to 0,,
+"",,,,,at the end of the start-up routine when no,,
+"",,,,,longer programming the device.,,
+"",,0,NVM_CTRL1C,,NVM control. Set this control to 0 at the start,0x1,R/W
+"",,,,,of the configuration sequence (as shown in,,
+"",,,,,the Start-Up Sequence section) and set to 1,,
+"",,,,,at the end of the start-up routine when no,,
+"",,,,,longer programming the device.,,
+0x08D,ADC_CLK_CTRL0,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],CLKOUT_SWING,,Controls the swing level of the ADC clock,0x0,R/W
+"",,,,,driver. Swing can be negative (inverts clock).,,
+"",,,,,The calculation for Code 0 to Code 9 is as,,
+"",,,,,follows:,,
+"",,,,,ADC driver swing = 993 mV − CLKOUT_,,
+"",,,,,SWING × 77 mV.,,
+"",,,,,The calculation for Code 10 to Code 19 is,,
+"",,,,,as follows:,,
+"",,,,,ADC driver swing = (20 − CLKOUT_SWING ×,,
+"",,,,,77 mV) − 1 V.,,
+0x08F,ADC_CLK_CTRL2,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,PD_CLKOUT_,,Powers down the CLKOUT± output driver.,0x0,R/W
+"",,,DRIVER,,,,
+0x090,DAC_POWERDOWN,[7:2],RESERVED,,Reserved.,0x0,R
+"",,1,DAC_PD1,,Powers down DAC1.,0x1,R/W
+"",,,,0,Power up DAC1.,,
+"",,,,1,Power down DAC1.,,
+"",,0,DAC_PD0,,Powers down DAC0.,0x1,R/W
+"",,,,0,Power up DAC0.,,
+"",,,,1,Power down DAC0.,,
+0x091,ACLK_CTRL,[7:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,ACLK_,,Analog clock receiver power-down.,0x1,R/W
+"",,,POWERDOWN,,,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x094,PLL_CLK_DIV,[7:2],RESERVED,,Reserved.,0x0,R
+"",,1,PLL_VCO_DIV3_EN,,Enable PLL output clock divide by 3.,0x0,R/W
+"",,0,PLL_VCO_DIV2_EN,,Enable PLL output clock divide by 2.,0x0,R/W
+"",,,,0,DAC clock = PLL VCO clock frequency.,,
+"",,,,1,DAC clock = PLL VCO clock frequency ÷ 2.,,
+0x095,PLL_BYPASS,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,PLL_BYPASS,,Enable direct clocking (bypassing the PLL,0x0,R/W
+"",,,,,clock).,,
+"",,,,0,Use the internal PLL to generate the DAC,,
+"",,,,,clock.,,
+"",,,,1,Bypass the PLL and directly clock with the,,
+"",,,,,DAC clock frequency.,,
+0x09A,NVM_CTRL,7,PD_BGR,,Bias power-down. Set this bit to 1 to,0x0,R/W
+"",,,,,power down the internal bias.,,
+"",,[6:0],RESERVED,,Reserved.,0x0,R/W
+0x0C0,DELAY_LINE_PD,[7:6],RESERVED,,Reserved.,0x0,R
+"",,5,DLL_CTRL0B,,DLL control. Set this bit to 0 to power up,0x1,R/W
+"",,,,,the delay line during the device,,
+"",,,,,configuration sequence.,,
+"",,4,DLL_CTRL0A,,DLL control. Set this bit to 0 to power up,0x1,R/W
+"",,,,,the delay line during the device,,
+"",,,,,configuration sequence.,,
+"",,[3:1],RESERVED,,Reserved.,0x0,R
+"",,0,DLL_PD,,Power down delay line. Set this bit to 0 to,0x1,R/W
+"",,,,,power up the delay line during the device,,
+"",,,,,configuration sequence.,,
+"",,,,0,Power up and enable the delay line.,,
+"",,,,1,Power down and bypass the delay line.,,
+0x0C1,DLL_CTRL0,[7:6],DLL_CTRL1C,,DAC control setting. Set this control to 1,0x1,R/W
+"",,,,,for optimal performance.,,
+"",,5,DLL_CTRL1B,,DLL control search mode. If the DAC,0x1,R/W
+"",,,,,"frequency is <4.5 GHz, set this bit to 0;",,
+"",,,,,"otherwise, set this bit to 1.",,
+"",,[4:3],DLL_CTRL1A,,DLL control search direction. Set this,0x2,R/W
+"",,,,,control to 1 for optimal performance.,,
+"",,[2:1],RESERVED,,Reserved.,0x0,R
+"",,0,DLL_ENABLE,,DLL controller enable.,0x0,R/W
+"",,,,0,Disable DLL.,,
+"",,,,1,Enable DLL.,,
+0x0C3,DLL_STATUS,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,DLL_LOCK,,DLL lock indicator. This control reads back,0x0,R
+"",,,,,1 if the DLL locks.,,
+0x0C7,DLL_READ,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,DLL_READ_EN,,Enable DLL readback status. A transition of,0x0,R/W
+"",,,,,0 to 1 updates the lock status bit readback,,
+"",,,,,in Register 0x0C3.,,
+0x0CC,DLL_FINE_DELAY0,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:0],DLL_FINE_DELAY0,,DLL delay control.,0x0,R/W
+0x0CD,DLL_FINE_DELAY1,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:0],DLL_FINE_DELAY1,,DLL delay control.,0x0,R/W
+0x0DB,DLL_UPDATE,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,DLL_DELAY_,,DLL update control. A transition from 0 to,0x0,R/W
+"",,,UPDATE,,1 updates the DLL circuitry with the,,
+"",,,,,current register control settings.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x0FF,MOD_SWITCH_,[7:2],RESERVED,,Reserved.,0x0,R
+"",DEBUG,,,,,,
+"",,1,CMPLX_MOD_,,Disables the divide by 2 block in the mod-,0x0,R/W
+"",,,DIV2_DISABLE,,ulator switch path. Set to 1 to bypass the,,
+"",,,,,divide by 2 block. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+"",,0,RESERVED,,Reserved.,0x0,R
+0x100,DIG_RESET,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,DIG_DATAPATH_PD,,"Holds all digital logic (SERDES digital,",0x1,R/W
+"",,,,,"digital clock generation, and digital",,
+"",,,,,datapath) in reset until clock tree is stable.,,
+"",,,,0,Normal operating mode.,,
+"",,,,1,Holds the digital logic in reset. Must be,,
+"",,,,,released (set to 0) after clocks to the chip,,
+"",,,,,are stable (PLL and DLL blocks are locked),,
+"",,,,,to use the digital datapath.,,
+0x110,JESD_MODE,7,MODE_NOT_IN_,,Programmed JESD204B mode and interpola-,0x0,R
+"",,,TABLE,,tion mode combination is not valid. Select,,
+"",,,,,a different combination.,,
+"",,6,COM_SYNC,,Combine the SYNCOUTx± signals in dual,0x0,R/W
+"",,,,,link case.,,
+"",,[5:0],JESD_MODE,,Sets the JESD204B mode configuration.,0x20,R/W
+"",,,,,See Table 13 for the JESD204B supported,,
+"",,,,,operating modes and compatible interpola-,,
+"",,,,,tion rates. Bit 5 of this control determines,,
+"",,,,,single link (set to 0) or dual link (set to 1).,,
+"",,,,,Bits[4:0] set the desired JESD204B mode,,
+"",,,,,according to Table 13.,,
+0x111,INTRP_MODE,[7:4],DP_INTERP_MODE,,Sets main datapath interpolation rate. See,0x8,R/W
+"",,,,,Table 13 for the JESD204B supported,,
+"",,,,,operating modes and compatible JESD204B,,
+"",,,,,modes and channel interpolation rates.,,
+"",,,,0x1,1×.,,
+"",,,,0x2,2×.,,
+"",,,,0x4,4×.,,
+"",,,,0x6,6×.,,
+"",,,,0x8,8×.,,
+"",,,,0xC,12×.,,
+"",,[3:0],CH_INTERP_MODE,,Sets channel interpolation rate. See Table 13,0x4,R/W
+"",,,,,for the JESD204B supported operating,,
+"",,,,,modes and compatible JESD204B modes,,
+"",,,,,and main datapath interpolation rates.,,
+"",,,,0x1,1×.,,
+"",,,,0x2,2×.,,
+"",,,,0x3,3×.,,
+"",,,,0x4,4×.,,
+"",,,,0x6,6×.,,
+"",,,,0x8,8×.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x112,DDSM_DATAPATH_,7,RESERVED,,Reserved.,0x0,R
+"",CFG,6,EN_CMPLX_MOD,,Modulator switch mode selection. This,,
+"",,,,,control allows modifying Configuration 3 of,,
+"",,,,,the modulator switch to allow complex (I/Q),,
+"",,,,,data from each NCO to pass to DACx. This,,
+"",,,,,function depends on the settings applied to,,
+"",,,,,"Bits[5:4] in this register, Register 0x112. When",,
+"",,,,,"this bit is set high, Bits[5:4] of this register are",,
+"",,,,,set to 0b11 (Modulator Switch Configuration,,
+"",,,,,3). This control is paged by the MAINDAC_,,
+"",,,,,PAGE bits in Register 0x008.,,
+"",,,,0,Switch configuration is as defined by,,
+"",,,,,Bits[5:4].,,
+"",,,,1,With Bits[5:4] = 0b11 and the DAC1 main,,
+"",,,,,"NCO enabled, DAC0 = I0_NCO + I1_NCO,",,
+"",,,,,DAC1 = Q0_NCO + Q1_NCO. With Bits[5:4] =,,
+"",,,,,"0b11 and the DAC1 main NCO disabled,",,
+"",,,,,"DAC0 = I0_NCO, DAC1 = Q0_NCO.",,
+"",,[5:4],DDSM_MODE,,Modulator switch mode selection. This,0x0,R/W
+"",,,,,control chooses the mode of operation for,,
+"",,,,,the main datapath NCO being configured.,,
+"",,,,,This control is paged by the MAINDAC_,,
+"",,,,,PAGE bits in Register 0x008.,,
+"",,,,00,DAC0 = I0; DAC1 = I1.,,
+"",,,,01,DAC0 = I0 + I1; DAC1 = Q0 + Q1.,,
+"",,,,10,DAC0 = I0; DAC1 = Q0.,,
+"",,,,11,DAC0 = I0 + I1; DAC1 = 0.,,
+"",,3,DDSM_NCO_EN,,Main datapath modulation enable. If the,0x0,R/W
+"",,,,,JESD204B mode chosen is a complex,,
+"",,,,,"mode (main datapath interpolation >1×),",,
+"",,,,,this bit must be set to 1 for each main,,
+"",,,,,datapath being used. If no modulation is,,
+"",,,,,"desired, set the FTW to be 0. This control is",,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Disable main datapath NCO.,,
+"",,,,1,Enable main datapath NCO.,,
+"",,2,DDSM_,,Enable main datapath modulus DDS. This,0x0,R/W
+"",,,MODULUS_EN,,control is paged by the MAINDAC_PAGE,,
+"",,,,,bits in Register 0x008.,,
+"",,,,0,Disable modulus DDS.,,
+"",,,,1,Enable modulus DDS.,,
+"",,1,DDSM_SEL_,,Selects upper or lower sideband from,0x0,R/W
+"",,,SIDEBAND,,modulation result. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+"",,,,0,Use upper sideband.,,
+"",,,,1,Use lower sideband = spectral flip.,,
+"",,0,EN_SYNC_ALL_,,Selects the signal channel NCOS used for,0x1,R/W
+"",,,CHNL_NCO_RESETS,,resets and FTW updates. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Channel NCOs reset or update their FTW,,
+"",,,,,based on channel NCO update requests.,,
+"",,,,1,Channel NCOs reset or update their FTW,,
+"",,,,,based on main datapath NCO update,,
+"",,,,,requests.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x113,DDSM_FTW_,7,RESERVED,,Reserved.,0x0,R
+"",UPDATE,[6:4],DDSM_FTW_REQ_,,Frequency tuning word automatic update,0x0,R/W
+"",,,MODE,,mode. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+"",,,,000,No automatic requests are generated,,
+"",,,,,when the FTW registers are written.,,
+"",,,,001,Automatically generates a DDSM_FTW_,,
+"",,,,,LOAD_REQ after DDSM_FTW Bits[7:0] are,,
+"",,,,,written.,,
+"",,,,010,Automatically generates a DDSM_FTW_,,
+"",,,,,LOAD_REQ after DDSM_FTW Bits[15:8] are,,
+"",,,,,written.,,
+"",,,,011,Automatically generates a DDSM_FTW_,,
+"",,,,,LOAD_REQ after DDSM_FTW Bits[23:16],,
+"",,,,,are written.,,
+"",,,,100,Automatically generates a DDSM_FTW_,,
+"",,,,,LOAD_REQ after DDSM_FTW Bits[31:24],,
+"",,,,,are written.,,
+"",,,,101,Automatically generate a DDSM_FTW_,,
+"",,,,,LOAD_REQ after DDSM_FTW Bits[39:32] is,,
+"",,,,,written.,,
+"",,,,110,Automatically generates a DDSM_FTW_,,
+"",,,,,LOAD_REQ after DDSM_FTW Bits[47:40],,
+"",,,,,are written.,,
+"",,3,RESERVED,,Reserved.,0x0,R
+"",,2,DDSM_FTW_,,Uses the next rising edge of SYSREF± to,0x0,R/W
+"",,,LOAD_SYSREF,,trigger FTW load and reset. This bit also,,
+"",,,,,"loads the calibration tone FTW, as well as",,
+"",,,,,the main NCO FTW on a rising edge,,
+"",,,,,detection. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+"",,1,DDSM_FTW_,,Frequency tuning word update acknow-,0x0,R
+"",,,LOAD_ACK,,ledge. This bit reads back 1 if the FTW and,,
+"",,,,,phase offset word is loaded properly. This,,
+"",,,,,control is paged by the MAINDAC_PAGE bits,,
+"",,,,,in Register 0x008.,,
+"",,,,0,FTW is not loaded.,,
+"",,,,1,FTW is loaded.,,
+"",,0,DDSM_FTW_,,Frequency tuning word update request,0x0,R/W
+"",,,LOAD_REQ,,from the SPI. This bit also loads the calibra-,,
+"",,,,,"tion tone FTW, as well as the main NCO",,
+"",,,,,FTW on a rising edge detection. This control,,
+"",,,,,is paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Clear DDSM_FTW_LOAD_ACK.,,
+"",,,,1,0 to 1 transition loads the FTW.,,
+0x114,DDSM_FTW0,[7:0],DDSM_FTW[7:0],,Sets the main datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSM_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSM_,,
+"",,,,,"FTW/248). If DDSM_MODULUS_EN is high,",,
+"",,,,,the main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSM_FTW + DDSM_ACC_DELTA/DDSM_,,
+"",,,,,ACC_MODULUS)/248. DDSM_ACC_DELTA,,
+"",,,,,must be >0. DDSM_ACC_DELTA must be,,
+"",,,,,>DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x115,DDSM_FTW1,[7:0],DDSM_FTW[15:8],,Sets the main datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSM_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSM_,,
+"",,,,,"FTW/248. If DDSM_MODULUS_EN is high,",,
+"",,,,,the main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSM_FTW + DDSM_ACC_DELTA/DDSM_,,
+"",,,,,ACC_MODULUS)/ 248. DDSM_ACC_DELTA,,
+"",,,,,must be > 0. DDSM_ACC_DELTA must be >,,
+"",,,,,DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x116,DDSM_FTW2,[7:0],DDSM_FTW[23:16],,Sets the main datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSM_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSM_,,
+"",,,,,"FTW/248. If DDSM_MODULUS_EN is high,",,
+"",,,,,the main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSM_FTW + DDSM_ACC_DELTA/DDSM_,,
+"",,,,,ACC_MODULUS)/248. DDSM_ACC_DELTA,,
+"",,,,,must be > 0. DDSM_ACC_DELTA must be >,,
+"",,,,,DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x117,DDSM_FTW3,[7:0],DDSM_FTW[31:24],,Sets the main datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSM_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSM_,,
+"",,,,,"FTW/248. If DDSM_MODULUS_EN is high,",,
+"",,,,,the main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSM_FTW + DDSM_ACC_DELTA/DDSM_,,
+"",,,,,ACC_MODULUS)/248. DDSM_ACC_DELTA,,
+"",,,,,must be > 0. DDSM_ACC_DELTA must be >,,
+"",,,,,DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x118,DDSM_FTW4,[7:0],DDSM_FTW[39:32],,Sets the main datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSM_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSM_,,
+"",,,,,"FTW/248. If DDSM_MODULUS_EN is high,",,
+"",,,,,the main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSM_FTW + DDSM_ACC_DELTA/DDSM_,,
+"",,,,,ACC_MODULUS)/248. DDSM_ACC_DELTA,,
+"",,,,,must be > 0. DDSM_ACC_DELTA must be >,,
+"",,,,,DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x119,DDSM_FTW5,[7:0],DDSM_FTW[47:40],,Sets the main datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSM_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSM_,,
+"",,,,,"FTW/248. If DDSM_MODULUS_EN is high,",,
+"",,,,,the main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSM_FTW + DDSM_ACC_DELTA/DDSM_,,
+"",,,,,ACC_MODULUS)/248. DDSM_ACC_DELTA,,
+"",,,,,must be > 0. DDSM_ACC_DELTA must be >,,
+"",,,,,DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x11C,DDSM_PHASE_,[7:0],DDSM_NCO_,,Sets main datapath NCO phase offset. Code,0x0,R/W
+"",OFFSET0,,PHASE_OFFSET[7:0],,"is in 16-bit, twos complement format.",,
+"",,,,,Degrees offset = 180 × (code/215. This,,
+"",,,,,control is paged by the MAINDAC_PAGE,,
+"",,,,,bits in Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x11D,DDSM_PHASE_,[7:0],DDSM_NCO_,,Sets main datapath NCO phase offset. Code,0x0,R/W
+"",OFFSET1,,PHASE_,,"is in 16-bit, twos complement format.",,
+"",,,OFFSET[15:8],,Degrees offset = 180 × (code/215). This,,
+"",,,,,control is paged by the MAINDAC_PAGE,,
+"",,,,,bits in Register 0x008.,,
+0x124,DDSM_ACC_,[7:0],DDSM_ACC_,,Sets DDSM_ACC_MODULUS. If DDSM_,0x0,R/W
+"",MODULUS0,,MODULUS[7:0],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSM_FTW +,,
+"",,,,,DDSM_ACC_DELTA/DDSM_ACC_,,
+"",,,,,MODULUS)/248. DDSM_ACC_DELTA must be,,
+"",,,,,>0. DDSM_ACC_DELTA must be > DDSM_,,
+"",,,,,ACC_MODULUS. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+0x125,DDSM_ACC_,[7:0],DDSM_ACC_,,Sets DDSM_ACC_MODULUS. If DDSM_,0x0,R/W
+"",MODULUS1,,MODULUS[15:8],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSM_FTW +,,
+"",,,,,DDSM_ACC_DELTA/DDSM_ACC_,,
+"",,,,,MODULUS)/248. DDSM_ACC_DELTA must be,,
+"",,,,,>0. DDSM_ACC_DELTA must be,,
+"",,,,,>DDSM_ACC_MODULUS. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x126,DDSM_ACC_,[7:0],DDSM_ACC_,,Sets DDSM_ACC_MODULUS. If DDSM_,0x0,R/W
+"",MODULUS2,,MODULUS[23:16],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSM_FTW +,,
+"",,,,,DDSM_ACC_DELTA/DDSM_ACC_,,
+"",,,,,MODULUS)/248. DDSM_ACC_DELTA must be,,
+"",,,,,>0. DDSM_ACC_DELTA must be > DDSM_,,
+"",,,,,ACC_MODULUS. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+0x127,DDSM_ACC_,[7:0],DDSM_ACC_,,Sets DDSM_ACC_MODULUS. If DDSM_,0x0,R/W
+"",MODULUS3,,MODULUS[31:24],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSM_FTW +,,
+"",,,,,DDSM_ACC_DELTA/DDSM_ACC_,,
+"",,,,,MODULUS)/248. DDSM_ACC_DELTA must be,,
+"",,,,,>0. DDSM_ACC_DELTA must be > DDSM_,,
+"",,,,,ACC_MODULUS. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+0x128,DDSM_ACC_,[7:0],DDSM_ACC_,,Sets DDSM_ACC_MODULUS. If DDSM_,0x0,R/W
+"",MODULUS4,,MODULUS[39:32],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSM_FTW +,,
+"",,,,,DDSM_ACC_DELTA/DDSM_ACC_,,
+"",,,,,MODULUS)/248. DDSM_ACC_DELTA must be,,
+"",,,,,>0. DDSM_ACC_DELTA must be > DDSM_,,
+"",,,,,ACC_MODULUS. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+0x129,DDSM_ACC_,[7:0],DDSM_ACC_,,Sets DDSM_ACC_MODULUS. If DDSM_,0x0,R/W
+"",MODULUS5,,MODULUS[47:40],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSM_FTW +,,
+"",,,,,DDSM_ACC_DELTA/DDSM_ACC_,,
+"",,,,,MODULUS)/248. DDSM_ACC_DELTA must be,,
+"",,,,,>0. DDSM_ACC_DELTA must be > DDSM_,,
+"",,,,,ACC_MODULUS. This control is paged by,,
+"",,,,,the MAINDAC_PAGE bits in Register 0x008.,,
+0x12A,DDSM_ACC_DELTA0,[7:0],DDSM_ACC_,,Sets DDSM_ACC_DELTA. If DDSM_,0x0,R/W
+"",,,DELTA[7:0],,"MODULUS_EN is high, main datapath NCO",,
+"",,,,,frequency = fDAC × (DDSM_FTW + DDSM_,,
+"",,,,,ACC_DELTA/DDSM_ACC_MODULUS)/248.,,
+"",,,,,DDSM_ACC_DELTA must be > 0. DDSM_,,
+"",,,,,ACC_DELTA must be > DDSM_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x12B,DDSM_ACC_DELTA1,[7:0],DDSM_ACC_,,Sets DDSM_ACC_DELTA. If DDSM_,0x0,R/W
+"",,,DELTA[15:8],,"MODULUS_EN is high, main datapath NCO",,
+"",,,,,frequency = fDAC × (DDSM_FTW + DDSM_,,
+"",,,,,ACC_DELTA/DDSM_ACC_MODULUS)/248.,,
+"",,,,,DDSM_ACC_DELTA must be > 0. DDSM_,,
+"",,,,,ACC_DELTA must be > DDSM_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+0x12C,DDSM_ACC_DELTA2,[7:0],DDSM_ACC_,,Sets DDSM_ACC_DELTA. If DDSM_,0x0,R/W
+"",,,DELTA[23:16],,"MODULUS_EN is high, main datapath NCO",,
+"",,,,,frequency = fDAC × (DDSM_FTW + DDSM_,,
+"",,,,,ACC_DELTA/DDSM_ACC_MODULUS)/248.,,
+"",,,,,DDSM_ACC_DELTA must be > 0. DDSM_,,
+"",,,,,ACC_DELTA must be > DDSM_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+0x12D,DDSM_ACC_DELTA3,[7:0],DDSM_ACC_,,Sets DDSM_ACC_DELTA. If DDSM_,0x0,R/W
+"",,,DELTA[31:24],,"MODULUS_EN is high, main datapath NCO",,
+"",,,,,frequency = fDAC × (DDSM_FTW + DDSM_,,
+"",,,,,ACC_DELTA/DDSM_ACC_MODULUS)/248.,,
+"",,,,,DDSM_ACC_DELTA must be > 0. DDSM_,,
+"",,,,,ACC_DELTA must be > DDSM_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+0x12E,DDSM_ACC_DELTA4,[7:0],DDSM_ACC_,,Sets DDSM_ACC_DELTA. If DDSM_,0x0,R/W
+"",,,DELTA[39:32],,"MODULUS_EN is high, main datapath NCO",,
+"",,,,,frequency = fDAC × (DDSM_FTW + DDSM_,,
+"",,,,,ACC_DELTA/DDSM_ACC_MODULUS)/248.,,
+"",,,,,DDSM_ACC_DELTA must be > 0. DDSM_,,
+"",,,,,ACC_DELTA must be > DDSM_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+0x12F,DDSM_ACC_DELTA5,[7:0],DDSM_ACC_,,Sets DDSM_ACC_DELTA. If DDSM_,0x0,R/W
+"",,,DELTA[47:40],,"MODULUS_EN is high, main datapath NCO",,
+"",,,,,frequency = fDAC × (DDSM_FTW + DDSM_,,
+"",,,,,ACC_DELTA/DDSM_ACC_MODULUS)/248.,,
+"",,,,,DDSM_ACC_DELTA must be > 0. DDSM_,,
+"",,,,,ACC_DELTA must be > DDSM_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,MAINDAC_PAGE bits in Register 0x008.,,
+0x130,DDSC_DATAPATH_,7,RESERVED,,Reserved.,0x0,R
+"",CFG,6,DDSC_NCO_EN,,Channel datapath modulation enable. If,0x0,R/W
+"",,,,,the JESD204B mode chosen is a complex,,
+"",,,,,"mode (channel interpolation >1×), this bit",,
+"",,,,,must be set to 1 for each channel datapath,,
+"",,,,,"being used. If no modulation is desired, set",,
+"",,,,,the FTW to 0. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+"",,,,0,Disable channel NCO.,,
+"",,,,1,Enable channel NCO.,,
+"",,[5:3],RESERVED,,Reserved.,0x0,R/W
+"",,2,DDSC_MODULUS_,,Enable channel modulus DDS. This control,0x0,R/W
+"",,,EN,,is paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Disable modulus DDS.,,
+"",,,,1,Enable modulus DDS.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,1,DDSC_SEL_,,Selects upper or lower sideband from,0x0,R/W
+"",,,SIDEBAND,,modulation result. This control is paged by,,
+"",,,,,the CHANNEL_PAGE bits in Register 0x008.,,
+"",,,,0,Use upper sideband.,,
+"",,,,1,Use lower sideband = spectral flip.,,
+"",,0,DDSC_EN_DC_,,Enable test tone generation by sending dc,0x0,R/W
+"",,,INPUT,,to input level to channel DDS. Set the,,
+"",,,,,amplitude in the DC_TEST_INPUT_,,
+"",,,,,AMPLITUDE control (Register 0x148 and,,
+"",,,,,Register 0x149). This control is paged by,,
+"",,,,,the CHANNEL_PAGE bits in Register 0x008.,,
+"",,,,0,Disable test tone generation.,,
+"",,,,1,Enable test tone generation.,,
+0x131,DDSC_FTW_UPDATE,[7:3],RESERVED,,Reserved.,0x0,R
+"",,2,DDSC_FTW_,,Use next rising edge of SYSREF± to trigger,0x0,R/W
+"",,,LOAD_SYSREF,,FTW load and reset. This control is paged by,,
+"",,,,,the CHANNEL_PAGE bits in Register 0x008.,,
+"",,1,DDSC_FTW_,,Frequency tuning word update acknow-,0x0,R
+"",,,LOAD_ACK,,ledge bit. This bit reads back 1 if the FTW,,
+"",,,,,and phase offset word is loaded properly.,,
+"",,,,,This control is paged by the CHANNEL_,,
+"",,,,,PAGE bits in Register 0x008.,,
+"",,,,0,FTW is not loaded.,,
+"",,,,1,FTW is loaded.,,
+"",,0,DDSC_FTW_,,Frequency tuning word update request,0x0,R/W
+"",,,LOAD_REQ,,from the SPI. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+"",,,,0,No FTW update.,,
+"",,,,1,0 to 1 transition loads the FTW.,,
+0x132,DDSC_FTW0,[7:0],DDSC_FTW[7:0],,Sets the channel datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSC_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSC_,,
+"",,,,,"FTW/248). If DDSC_MODULUS_EN is high,",,
+"",,,,,main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSC_FTW + DDSC_ACC_DELTA/DDSC_,,
+"",,,,,ACC_MODULUS)/248. DDSC_ACC_DELTA,,
+"",,,,,must be > 0. DDSC_ACC_DELTA must be >,,
+"",,,,,DDSC_ACC_MODULUS. This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x133,DDSC_FTW1,[7:0],DDSC_FTW[15:8],,Sets the channel datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSC_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSC_,,
+"",,,,,"FTW/248). If DDSC_MODULUS_EN is high,",,
+"",,,,,main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSC_FTW + DDSC_ACC_DELTA/DDSC_,,
+"",,,,,ACC_MODULUS)/248. DDSC_ACC_DELTA,,
+"",,,,,must be > 0. DDSC_ACC_DELTA must be >,,
+"",,,,,DDSC_ACC_MODULUS. This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x134,DDSC_FTW2,[7:0],DDSC_FTW[23:16],,Sets the channel datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSC_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSC_,,
+"",,,,,"FTW/248). If DDSC_MODULUS_EN is high,",,
+"",,,,,main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSC_FTW + DDSC_ACC_DELTA/DDSC_,,
+"",,,,,ACC_MODULUS)/248. DDSC_ACC_DELTA,,
+"",,,,,must be > 0. DDSC_ACC_DELTA must be >,,
+"",,,,,DDSC_ACC_MODULUS. This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x135,DDSC_FTW3,[7:0],DDSC_FTW[31:24],,Sets the channel datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSC_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSC_,,
+"",,,,,"FTW/248). If DDSC_MODULUS_EN is high,",,
+"",,,,,main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSC_FTW + DDSC_ACC_DELTA/DDSC_,,
+"",,,,,ACC_MODULUS)/248. DDSC_ACC_DELTA,,
+"",,,,,must be > 0. DDSC_ACC_DELTA must be >,,
+"",,,,,DDSC_ACC_MODULUS. This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x136,DDSC_FTW4,[7:0],DDSC_FTW[39:32],,Sets the channel datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSC_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSC_,,
+"",,,,,"FTW/248). If DDSC_MODULUS_EN is high,",,
+"",,,,,main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSC_FTW + DDSC_ACC_DELTA/DDSC_,,
+"",,,,,ACC_MODULUS)/248. DDSC_ACC_DELTA,,
+"",,,,,must be > 0. DDSC_ACC_DELTA must be >,,
+"",,,,,DDSC_ACC_MODULUS. This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x137,DDSC_FTW5,[7:0],DDSC_FTW[47:40],,Sets the channel datapath NCO FTW. If,0x0,R/W
+"",,,,,"DDSC_MODULUS_EN is low, the main",,
+"",,,,,datapath NCO frequency = fDAC × (DDSC_,,
+"",,,,,"FTW/248). If DDSC_MODULUS_EN is high,",,
+"",,,,,main datapath NCO frequency = fDAC ×,,
+"",,,,,(DDSC_FTW + DDSC_ACC_DELTA/DDSC_,,
+"",,,,,ACC_MODULUS)/248. DDSC_ACC_DELTA,,
+"",,,,,must be > 0. DDSC_ACC_DELTA must be >,,
+"",,,,,DDSC_ACC_MODULUS. This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x138,DDSC_PHASE_,[7:0],DDSC_NCO_,,Sets the channel NCO phase offset. Code is in,0x0,R/W
+"",OFFSET0,,PHASE_OFFSET[7:0],,"16-bit, twos complement format. Degrees",,
+"",,,,,offset = 180 × (code/215). This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x139,DDSC_PHASE_,[7:0],DDSC_NCO_,,Sets the channel NCO phase offset. Code is in,0x0,R/W
+"",OFFSET1,,PHASE_,,"16-bit, twos complement format. Degrees",,
+"",,,OFFSET[15:8],,offset = 180 × (code/215). This control is,,
+"",,,,,paged by the CHANNEL_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x13A,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_MODULUS. If DDSC_,0x0,R/W
+"",MODULUS0,,MODULUS[7:0],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0.,,
+"",,,,,DDSC_ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x13B,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_MODULUS. If DDSC_,0x0,R/W
+"",MODULUS1,,MODULUS[15:8],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0.,,
+"",,,,,DDSC_ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x13C,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_MODULUS. If DDSC_,0x0,R/W
+"",MODULUS2,,MODULUS[23:16],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x13D,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_MODULUS. If DDSC_,0x0,R/W
+"",MODULUS3,,MODULUS[31:24],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0.,,
+"",,,,,DDSC_ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x13E,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_MODULUS. If DDSC_,0x0,R/W
+"",MODULUS4,,MODULUS[39:32],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0.,,
+"",,,,,DDSC_ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x13F,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_MODULUS. If DDSC_,0x0,R/W
+"",MODULUS5,,MODULUS[47:40],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0.,,
+"",,,,,DDSC_ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x140,DDSC_ACC_DELTA0,[7:0],DDSC_ACC_,,Sets DDSC_ACC_DELTA. If DDSC_,0x0,R/W
+"",,,DELTA[7:0],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x141,DDSC_ACC_,[7:0],DDSC_ACC_,,Sets DDSC_ACC_DELTA. If DDSC_,0x0,R/W
+"",DELTA1,,DELTA[15:8],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x142,DDSC_ACC_DELTA2,[7:0],DDSC_ACC_,,Sets DDSC_ACC_DELTA. If DDSC_,0x0,R/W
+"",,,DELTA[23:16],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x143,DDSC_ACC_DELTA3,[7:0],DDSC_ACC_,,Sets DDSC_ACC_DELTA. If DDSC_,0x0,R/W
+"",,,DELTA[31:24],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x144,DDSC_ACC_DELTA4,[7:0],DDSC_ACC_,,Sets DDSC_ACC_DELTA. If DDSC_,0x0,R/W
+"",,,DELTA[39:32],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x145,DDSC_ACC_DELTA5,[7:0],DDSC_ACC_,,Sets DDSC_ACC_DELTA. If DDSC_,0x0,R/W
+"",,,DELTA[47:40],,"MODULUS_EN is high, the main datapath",,
+"",,,,,NCO frequency = fDAC × (DDSC_FTW +,,
+"",,,,,DDSC_ACC_DELTA/DDSC_ACC_MODULUS)/,,
+"",,,,,248. DDSC_ACC_DELTA must be > 0. DDSC_,,
+"",,,,,ACC_DELTA must be > DDSC_ACC_,,
+"",,,,,MODULUS. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+0x146,CHNL_GAIN0,[7:0],CHNL_GAIN[7:0],,Sets the scalar channel gain value. This,0x0,R/W
+"",,,,,control is paged by the CHANNEL_PAGE bits,,
+"",,,,,in Register 0x008. Channel gain =,,
+"",,,,,CHNL_GAIN/211.,,
+0x147,CHNL_GAIN1,[7:4],RESERVED,,Reserved.,0x0,R
+"",,[3:0],CHNL_GAIN[11:8],,Sets the scalar channel gain value. This,0x8,R/W
+"",,,,,control is paged by the CHANNEL_PAGE bits,,
+"",,,,,in Register 0x008. Channel gain =,,
+"",,,,,CHNL_GAIN/211.,,
+0x148,DC_CAL_TONE0,[7:0],DC_TEST_INPUT_,,DC test tone amplitude. This value sets the I,0x0,R/W
+"",,,AMPLITUDE[7:0],,path and Q paths amplitudes independently.,,
+"",,,,,Set these bits to 0x50FF for a full-scale,,
+"",,,,,tone and ensure DDSC_EN_DC_INPUT in,,
+"",,,,,Register 0x130 Bit 0 is set to 1. This control,,
+"",,,,,is paged by the CHANNEL_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x149,DC_CAL_TONE1,[7:0],DC_TEST_INPUT_,,DC test tone amplitude. This value sets the I,0x0,R/W
+"",,,AMPLITUDE[15:8],,path and Q paths amplitudes independently.,,
+"",,,,,Set to 0x50FF for a full-scale tone and ensure,,
+"",,,,,"that DDSC_EN_DC_INPUT (Register 0x130,",,
+"",,,,,Bit 0) is set to 1. This control is paged by the,,
+"",,,,,CHANNEL_PAGE bits in Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x14B,PRBS,7,PRBS_GOOD_Q,,DAC1 good data indicator.,0x0,R
+"",,,,1,Correct PRBS sequence detected.,,
+"",,,,0,Incorrect sequence detected. Sticky; reset,,
+"",,,,,to 1 by PRBS_RESET.,,
+"",,6,PRBS_GOOD_I,,DAC0 good data indicator.,0x0,R
+"",,,,0,Incorrect sequence detected. Sticky; reset,,
+"",,,,,to 1 by PRBS_RESET.,,
+"",,,,1,Correct PRBS sequence detected.,,
+"",,5,RESERVED,,Reserved.,0x0,R
+"",,4,PRBS_INV_Q,,DAC1 data inversion.,0x1,R/W
+"",,,,0,Expect normal data.,,
+"",,,,1,Expect inverted data.,,
+"",,3,PRBS_INV_I,,DAC0 data inversion.,0x0,R/W
+"",,,,0,Expect normal data.,,
+"",,,,1,Expect inverted data.,,
+"",,2,PRBS_MODE,,Select which PRBS polynomial is used for,0x0,R/W
+"",,,,,the datapath PRBS test.,,
+"",,,,0,7-bit: x7 + x6 + 1.,,
+"",,,,1,15-bit: x15 + x14 + 1.,,
+"",,1,PRBS_RESET,,Reset error counters.,0x0,R/W
+"",,,,0,Normal operation.,,
+"",,,,1,Reset counters.,,
+"",,0,PRBS_EN,,Enable PRBS checker.,0x0,R/W
+"",,,,0,Disable.,,
+"",,,,1,Enable.,,
+0x14C,PRBS_ERROR_I,[7:0],PRBS_COUNT_I,,DAC0 PRBS error count.,0x0,R
+0x14D,PRBS_ERROR_Q,[7:0],PRBS_COUNT_Q,,DAC1 PRBS error count.,0x0,R
+0x14E,PRBS_CHANSEL,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],PRBS_CHANSEL,,Selects the channel to which the PRBS_,0x7,R/W
+"",,,,,GOOD_x and PRBS_COUNT_x bit field,,
+"",,,,,readbacks correspond.,,
+"",,,,0,Select Channel 0 for PRBS_COUNT_x and,,
+"",,,,,"PRBS_GOOD_x (Channel 0, DAC0).",,
+"",,,,1,Select Channel 1 for PRBS_COUNT_x and,,
+"",,,,,"PRBS_GOOD_x (Channel 1, DAC0).",,
+"",,,,2,Select Channel 2 for PRBS_COUNT_x and,,
+"",,,,,"PRBS_GOOD_x (Channel 2, DAC0).",,
+"",,,,3,Select Channel 3 for PRBS_COUNT_x and,,
+"",,,,,"PRBS_GOOD_x (Channel 0, DAC1).",,
+"",,,,4,Select Channel 4 for PRBS_COUNT_x and,,
+"",,,,,"PRBS_GOOD_x (Channel 1, DAC1).",,
+"",,,,5,Select Channel 5 for PRBS_COUNT_x and,,
+"",,,,,"PRBS_GOOD_x (Channel 2, DAC1).",,
+"",,,,6,"OR all channels for PRBS_GOOD_x, sum all",,
+"",,,,,channels for PRBS_COUNT_x.,,
+0x151,DECODE_MODE,[7:5],RESERVED,,Reserved.,0x0,R
+"",,4,MSB_SHUFFLE_EN,,MSB shuffle control. Set =1 to enable,0x0,R/W
+"",,,,,"shuffling the MSBs, or set = 0 to disable",,
+"",,,,,MSB shuffle and use the default (static),,
+"",,,,,thermometer encoding instead.,,
+"",,[3:0],RESERVED,,Reserved.,0x0,R
+0x1DE,SPI_ENABLE,[7:2],RESERVED,,Reserved.,0x0,R
+"",,1,SPI_EN1,,Enable SPI control.,0x1,R/W
+"",,0,SPI_EN0,,Enable SPI control.,0x1,R/W
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x1E2,DDSM_CAL_FTW0,[7:0],DDSM_CAL_,,FTW of the calibration accumulator. This,0x0,R/W
+"",,,FTW[7:0],,control is paged by the MAINDAC_PAGE bits,,
+"",,,,,in Register 0x008.,,
+0x1E3,DDSM_CAL_FTW1,[7:0],DDSM_CAL_,,FTW of the calibration accumulator. This,0x0,R/W
+"",,,FTW[15:8],,control is paged by the MAINDAC_PAGE bits,,
+"",,,,,in Register 0x008.,,
+0x1E4,DDSM_CAL_FTW2,[7:0],DDSM_CAL_,,FTW of the calibration accumulator. This,0x0,R/W
+"",,,FTW[23:16],,control is paged by the MAINDAC_PAGE bits,,
+"",,,,,in Register 0x008.,,
+0x1E5,DDSM_CAL_FTW3,[7:0],DDSM_CAL_,,FTW of the calibration accumulator. This,0x0,R/W
+"",,,FTW[31:24],,control is paged by the MAINDAC_PAGE bits,,
+"",,,,,in Register 0x008.,,
+0x1E6,DDSM_CAL_MODE_,[7:3],RESERVED,,Reserved.,0x0,R
+"",DEF,2,DDSM_EN_CAL_,,Enable clock calibration accumulator. This bit,0x0,R/W
+"",,,ACC,,"must be first set high, and then must load",,
+"",,,,,the calibration FTW into Register 0x1E2 to,,
+"",,,,,Register 0x1E5 to take effect. This control,,
+"",,,,,is paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Disabled (does not clock the calibration,,
+"",,,,,frequency accumulator).,,
+"",,,,1,Enables (turns on the clock to the,,
+"",,,,,calibration frequency accumulator).,,
+"",,1,DDSM_EN_CAL_,,Enable dc input to calibration DDS. This,0x0,R/W
+"",,,DC_INPUT,,control is paged by the MAINDAC_PAGE,,
+"",,,,,bits in Register 0x008.,,
+"",,,,0,Mux in datapath signal to the input of the,,
+"",,,,,final DDS.,,
+"",,,,1,Mux in dc to the input of the final DDS.,,
+"",,0,DDSM_EN_CAL_,,Enable tuning of the signal to calibration,0x0,R/W
+"",,,FREQ_TUNE,,frequency for DAC0 only. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Disable calibration frequency tuning.,,
+"",,,,1,Enable calibration frequency tuning.,,
+0x1E7,DATAPATH_NCO_,[7:2],RESERVED,,Reserved.,0x0,R
+"",SYNC_CFG,,,,,,
+"",,1,ALL_NCO_SYNC_,,Acknowledge signal that all the active NCOs,0x0,R
+"",,,ACK,,are loaded. This bit is the acknowledge,,
+"",,,,,indicator for both the START_NCO_SYNC,,
+"",,,,,bit (Bit 0 of this register) and the NCORST_,,
+"",,,,,"AFTER_ROT_EN bit (Register 0x03B, Bit 4)",,
+"",,,,,method of resetting the NCOs. This control,,
+"",,,,,is paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+"",,0,START_NCO_SYNC,,Used to start the sync of the NCOs on a,0x0,R/W
+"",,,,,rising edge of the SPI bit or SYSREF±,,
+"",,,,,"signal, depending on which is chosen as",,
+"",,,,,the update trigger. Upon receiving a,,
+"",,,,,"trigger, the FTWs are loaded first, and then",,
+"",,,,,a synchronization occurs. This control is,,
+"",,,,,paged by the MAINDAC_PAGE bits in,,
+"",,,,,Register 0x008.,,
+0x200,MASTER_PD,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,SERDES_MASTER_,,Powers down the entire JESD204B receiver,0x1,R/W
+"",,,PD,,analog (all eight channels and bias).,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x201,PHY_PD,[7:0],PHY_PD,,SPI override to power down the individual,0xEE,R/W
+"",,,,,PHYs. Bit 0 controls the SERDIN0± PHY.,,
+"",,,,,Bit 1 controls the SERDIN1± PHY.,,
+"",,,,,Bit 2 controls the SERDIN2± PHY.,,
+"",,,,,Bit 3 controls the SERDIN3± PHY.,,
+"",,,,,Bit 4 controls the SERDIN4± PHY.,,
+"",,,,,Bit 5 controls the SERDIN5± PHY.,,
+"",,,,,Bit 6 controls the SERDIN6± PHY.,,
+"",,,,,Bit 7 controls the SERDIN7± PHY.,,
+0x203,GENERIC_PD,[7:2],RESERVED,,Reserved.,0x0,R
+"",,1,PD_SYNCOUT0,,Powers down the SYNCOUT0± driver.,0x0,R/W
+"",,,,0,Enables the SYNCOUT0± output pins.,,
+"",,,,1,Powers down the SYNCOUT0± output pins.,,
+"",,0,PD_SYNCOUT1,,Powers down the SYNCOUT1± driver.,0x1,R/W
+"",,,,0,Enables the SYNCOUT1± output pins.,,
+"",,,,1,Powers down the SYNCOUT1± output pins.,,
+0x206,CDR_RESET,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,CDR_PHY_RESET,,PHY reset control bit. Set this bit to 1 to,0x0,R/W
+"",,,,,take the PHYs out of reset during device,,
+"",,,,,operation.,,
+0x210,CBUS_ADDR,[7:0],SERDES_CBUS_,,SERDES configuration control register to,0x0,R/W
+"",,,ADDR,,set SERDES configuration address controls.,,
+0x212,CBUS_WRSTROBE_,[7:0],SERDES_CBUS_,,SERDES configuration control register to,0x0,R/W
+"",PHY,,WR0,,commit the SERDES configuration controls,,
+"",,,,,written.,,
+0x213,CBUS_WRSTROBE_,[7:1],RESERVED,,Reserved.,0x0,R
+"",OTHER,0,SERDES_CBUS_,,SERDES configuration control register to,0x0,R/W
+"",,,WR1,,commit the SERDES configuration controls,,
+"",,,,,written.,,
+0x216,CBUS_WDATA,[7:0],SERDES_CBUS_,,SERDES configuration control register to,0x0,R/W
+"",,,DATA,,set the SERDES configuration control data.,,
+0x240,EQ_BOOST_PHY_,[7:6],EQ_BOOST_PHY3,,Equalizer setting for PHY 3 based on,0x3,R/W
+"",3_0,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[5:4],EQ_BOOST_PHY2,,Equalizer setting for PHY 2 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[3:2],EQ_BOOST_PHY1,,Equalizer setting for PHY 1 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[1:0],EQ_BOOST_PHY0,,Equalizer setting for PHY 0 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+0x234,CDR_BITINVERSE,[7:0],SEL_IF_,,Output data inversion bit controls. Set Bit x,0x66,R/W
+"",,,PARDATAINV_DES_,,corresponding to PHY x to invert the bit,,
+"",,,RC_CH,,polarity.,,
+"",,,,0,Not inverted.,,
+"",,,,1,Inverted.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x241,EQ_BOOST_PHY_,[7:6],EQ_BOOST_PHY7,,Equalizer setting for PHY 7 based on,0x3,R/W
+"",7_4,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[5:4],EQ_BOOST_PHY6,,Equalizer setting for PHY 6 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[3:2],EQ_BOOST_PHY5,,Equalizer setting for PHY 5 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[1:0],EQ_BOOST_PHY4,,Equalizer setting for PHY 4 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,10,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+0x242,EQ_GAIN_PHY_3_0,[7:6],EQ_GAIN_PHY3,,Equalizer gain for PHY 3 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[5:4],EQ_GAIN_PHY2,,Equalizer gain for PHY 2 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[3:2],EQ_GAIN_PHY1,,Equalizer gain for PHY 1 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[1:0],EQ_GAIN_PHY0,,Equalizer gain for PHY 0 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+0x243,EQ_GAIN_PHY_7_4,[7:6],EQ_GAIN_PHY7,,Equalizer gain for PHY 7 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[5:4],EQ_GAIN_PHY6,,Equalizer gain for PHY 6 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[3:2],EQ_GAIN_PHY5,,Equalizer gain for PHY 5 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+"",,[1:0],EQ_GAIN_PHY4,,Equalizer gain for PHY 4 based on,0x3,R/W
+"",,,,,insertion loss of the system.,,
+"",,,,01,Insertion loss ≤ 11 dB.,,
+"",,,,11,Insertion loss > 11 dB.,,
+0x244,EQ_FB_PHY_0,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY_0,,SERDES equalizer setting for PHY0. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x245,EQ_FB_PHY_1,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY1,,SERDES equalizer setting for PHY1. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x246,EQ_FB_PHY_2,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY2,,SERDES equalizer setting for PHY2. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x247,EQ_FB_PHY_3,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY3,,SERDES equalizer setting for PHY3. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x248,EQ_FB_PHY_4,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY4,,SERDES equalizer setting for PHY4. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x249,EQ_FB_PHY_5,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY5,,SERDES equalizer setting for PHY5. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x24A,EQ_FB_PHY_6,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY6,,SERDES equalizer setting for PHY6. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x24B,EQ_FB_PHY_7,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],EQ_PHY7,,SERDES equalizer setting for PHY7. Set this,0x19,R/W
+"",,,,,control to 0x1F for optimal performance.,,
+0x250,LBT_REG_CNTRL_0,[7:0],EN_LBT_DES_,,Enable loopback test for desired physical,0x0,R/W
+"",,,RC_CH,,"lanes per PHY, with Bit x corresponding to",,
+"",,,,,PHY x.,,
+0x251,LBT_REG_CNTRL_1,[7:2],RESERVED,,Reserved.,0x0,R
+"",,1,EN_LBT_,,Enables half rate mode for the loopback,0x1,R/W
+"",,,HALFRATE_DES_RC,,"test. If this bit is set to 1, the output data",,
+"",,,,,rate = 2× the input clock frequency. If this,,
+"",,,,,"bit is set to 0, the output data rate = the",,
+"",,,,,input clock frequency.,,
+"",,0,INIT_LBT_SYNC_,,Initiate the loopback test by toggling this,0x0,R/W
+"",,,DES_RC,,"bit from 0 to 1, then back to 0.",,
+0x253,SYNCOUT0_CTRL,[7:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,SEL_SYNCOUT0_,,This control determines the output driver,0x0,R/W
+"",,,MODE,,mode for the SYNCOUT0± pin operation.,,
+"",,,,,Both SYNCOUT0± and SYNCOUT1± must,,
+"",,,,,be set to the same mode of operation.,,
+"",,,,0,SYNCOUT0± is set to CMOS output.,,
+"",,,,1,SYNCOUT0± is set to LVDS output.,,
+0x254,SYNCOUT1_CTRL,[7:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,SEL_SYNCOUT1_,,This control determines the output driver,0x0,R/W
+"",,,MODE,,mode for the SYNCOUT1± pin operation.,,
+"",,,,,Both SYNCOUT0± and SYNCOUT1± must,,
+"",,,,,be set to the same mode of operation.,,
+"",,,,0,SYNCOUT1± is set to CMOS output.,,
+"",,,,1,SYNCOUT1± is set to LVDS output.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x280,PLL_ENABLE_CTRL,[7:3],RESERVED,,Reserved.,0x0,R
+"",,2,LOLSTICKYCLEAR_,,Clears out loss of lock bit.,0x0,R/W
+"",,,LCPLL_RC,,,,
+"",,1,LDSYNTH_LCPLL_,,Pulse high to start VCO calibration,0x0,R/W
+"",,,RC,,(without restarting the regulator or,,
+"",,,,,remeasuring the temperature).,,
+"",,0,SERDES_PLL_,,SERDES circuitry blocks are powered off,0x1,R/W
+"",,,STARTUP,,when this bit is set to 0. Set this bit to 1 at,,
+"",,,,,the end of the SERDES configuration writes.,,
+"",,,,,"When this bit is set to 1, it powers up the",,
+"",,,,,SERDES PLL blocks and starts the LDO and,,
+"",,,,,calibration routine to lock the PLL auto-,,
+"",,,,,matically to the appropriate lane rate based,,
+"",,,,,on the JESD204B mode and interpolation,,
+"",,,,,options programmed in the device. The,,
+"",,,,,"SERDES_PLL_LOCK bit (Register 0x281,",,
+"",,,,,Bit 0) reads 1 when the PLL achieves lock.,,
+0x281,PLL_STATUS,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,SERDES_PLL_LOCK,,PLL is locked when this bit is high.,0x0,R
+0x300,GENERAL_JRX_,[7:4],RESERVED,,Reserved.,0x0,R
+"",CTRL_0,3,LINK_MODE,,Reads back 0 when in single-link mode,0x0,R/W
+"",,,,,and 1 when in dual-link mode.,,
+"",,2,LINK_PAGE,,Link paging. This bit selects which link,0x0,R/W
+"",,,,,register map is used. This paging affects,,
+"",,,,,Register 0x400 to Register 0x4BB.,,
+"",,,,0,Page QBD0 for Link 0.,,
+"",,,,1,Page QBD1 for Link 1.,,
+"",,[1:0],LINK_EN,,These bits bring up the JESD204B digital,0x0,R/W
+"",,,,,receiver when all link parameters are,,
+"",,,,,programmed and all clocks are ready. Bit 0,,
+"",,,,,"applies to Link 0, whereas Bit 1 applies to",,
+"",,,,,Link 1. Link 1 is only available in dual-link,,
+"",,,,,mode.,,
+0x302,DYN_LINK_,[7:6],RESERVED,,Reserved.,0x0,R
+"",LATENCY_0,[5:0],DYN_LINK_,,"Dynamic link latency, Link 0. Latency",0x0,R
+"",,,LATENCY_0,,between the LMFC receiver for Link 0 and,,
+"",,,,,the last arriving LMFC boundary in units of,,
+"",,,,,PCLK cycles.,,
+0x303,DYN_LINK_,[7:6],RESERVED,,Reserved.,0x0,R
+"",LATENCY_1,[5:0],DYN_LINK_,,"Dynamic link latency, Link 1. Latency",0x0,R
+"",,,LATENCY_1,,between the LMFC receiver for Link 1 and,,
+"",,,,,the last arriving LMFC boundary in units of,,
+"",,,,,PCLK cycles.,,
+0x304,LMFC_DELAY_0,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:0],LMFC_DELAY_0,,"LMFC delay, Link 0. Delay from the LMFC",0x0,R/W
+"",,,,,to the LMFC receiver for Link 0 in units of,,
+"",,,,,PCLK cycles.,,
+0x305,LMFC_DELAY_1,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:0],LMFC_DELAY_1,,"LMFC delay, Link 1. Delay from the LMFC",0x0,R/W
+"",,,,,to the LMFC receiver for Link 1 in units of,,
+"",,,,,PCLK cycles.,,
+0x306,LMFC_VAR_0,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:0],LMFC_VAR_0,,"Variable delay buffer, Link 0. These bits set",0x3F,R/W
+"",,,,,when data is read from a buffer to be con-,,
+"",,,,,sistent across links and power cycles (in units,,
+"",,,,,of PCLK cycles). The maximum value is,,
+"",,,,,0xC.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x307,LMFC_VAR_1,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:0],LMFC_VAR_1,,"Variable delay buffer, Link 1. These bits set",0x3F,R/W
+"",,,,,when data is read from a buffer to be con-,,
+"",,,,,sistent across links and power cycles (in units,,
+"",,,,,of PCLK cycles). The maximum value is 0xC.,,
+0x308,XBAR_LN_0_1,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],LOGICAL_LANE1_,,Logical Lane 1 source. These bits select a,0x1,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 1.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+"",,[2:0],LOGICAL_LANE0_,,Logical Lane 0 source. These bits select a,0x0,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 0.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+0x309,XBAR_LN_2_3,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],LOGICAL_LANE3_,,Logical Lane 3 source. These bits select a,0x3,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 3.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+"",,[2:0],LOGICAL_LANE2_,,Logical Lane 2 source. These bits select a,0x2,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 2.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x30A,XBAR_LN_4_5,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],LOGICAL_LANE5_,,Logical Lane 5 source. These bits select a,0x5,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 5.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+"",,[2:0],LOGICAL_LANE4_,,Logical Lane 4 source. These bits select a,0x4,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 4.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+0x30B,XBAR_LN_6_7,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],LOGICAL_LANE7_,,Logical Lane 7 source. These bits select a,0x7,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 7.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+"",,[2:0],LOGICAL_LANE6_,,Logical Lane 6 source. These bits select a,0x6,R/W
+"",,,SRC,,physical lane to be mapped onto Logical,,
+"",,,,,Lane 6.,,
+"",,,,000,Data is from SERDIN0±.,,
+"",,,,001,Data is from SERDIN1±.,,
+"",,,,010,Data is from SERDIN2±.,,
+"",,,,011,Data is from SERDIN3±.,,
+"",,,,100,Data is from SERDIN4±.,,
+"",,,,101,Data is from SERDIN5±.,,
+"",,,,110,Data is from SERDIN6±.,,
+"",,,,111,Data is from SERDIN7±.,,
+0x30C,FIFO_STATUS_REG_0,[7:0],LANE_FIFO_FULL,,Bit x corresponds to FIFO full flag for data,0x0,R
+"",,,,,from SERDINx±.,,
+0x30D,FIFO_STATUS_REG_1,[7:0],LANE_FIFO_EMPTY,,Bit x corresponds to FIFO empty flag for,0x0,R
+"",,,,,data from SERDINx±.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x311,SYNCOUT_GEN_0,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,EOMF_MASK_1,,Mask end of multiframe (EOMF) from,0x0,R/W
+"",,,,,QBD1. Assert SYNCOUT1± based on the,,
+"",,,,,loss of the multiframe synchronization.,,
+"",,,,0,Do not assert SYNCOUT1± on loss of,,
+"",,,,,multiframe.,,
+"",,,,1,Assert SYNCOUT1± on loss of multiframe.,,
+"",,2,EOMF_MASK_0,,Mask EOMF from QBD0. Assert,0x0,R/W
+"",,,,,SYNCOUT0± based on the loss of the,,
+"",,,,,multiframe synchronization.,,
+"",,,,0,Do not assert SYNCOUT0± on loss of,,
+"",,,,,multiframe.,,
+"",,,,1,Assert SYNCOUT0± on loss of multiframe.,,
+"",,1,EOF_MASK_1,,Mask EOF from QBD1. Assert SYNCOUT1±,0x0,R/W
+"",,,,,based on loss of frame synchronization.,,
+"",,,,0,Do not assert SYNCOUT1± on loss of,,
+"",,,,,frame.,,
+"",,,,1,Assert SYNCOUT1± on loss of frame.,,
+"",,0,EOF_MASK_0,,Mask EOF from QBD0. Assert SYNCOUT0±,0x0,R/W
+"",,,,,based on loss of frame synchronization.,,
+"",,,,0,Do not assert SYNCOUT0± on loss of,,
+"",,,,,frame.,,
+"",,,,1,Assert SYNCOUT0± on loss of frame.,,
+0x312,SYNCOUT_GEN_1,[7:4],SYNC_ERR_DUR,,Duration of SYNCOUTx± low for the,0x0,R/W
+"",,,,,purposes of the synchronization error,,
+"",,,,,report. Duration = (0.5 + code) PCLK,,
+"",,,,,cycles. To most closely match the specified,,
+"",,,,,"value, set these bits as close as possible to",,
+"",,,,,f/2 PCLK cycles. These bits are shared,,
+"",,,,,between SYNCOUT0± and SYNCOUT1±.,,
+"",,[3:0],RESERVED,,Reserved.,0x0,R/W
+0x315,PHY_PRBS_TEST_EN,[7:0],PHY_TEST_EN,,Enable PHY BER by ungating the clocks.,0x0,R/W
+"",,,,0,PHY test disable.,,
+"",,,,1,PHY test enable.,,
+0x316,PHY_PRBS_TEST_,7,RESERVED,,Reserved.,0x0,R
+"",CTRL,[6:4],PHY_SRC_ERR_CNT,,,0x0,R/W
+"",,,,000,Report Lane 0 error count.,,
+"",,,,001,Report Lane 1 error count.,,
+"",,,,010,Report Lane 2 error count.,,
+"",,,,011,Report Lane 3 error count.,,
+"",,,,100,Report Lane 4 error count.,,
+"",,,,101,Report Lane 5 error count.,,
+"",,,,110,Report Lane 6 error count.,,
+"",,,,111,Report Lane 7 error count.,,
+"",,[3:2],PHY_PRBS_PAT_SEL,,Select PRBS pattern for PHY BER test.,0x0,R/W
+"",,,,00,PRBS7.,,
+"",,,,01,PRBS15.,,
+"",,,,10,PRBS31.,,
+"",,,,11,Not used.,,
+"",,1,PHY_TEST_START,,Starts and stops the PHY PRBS test.,0x0,R/W
+"",,,,0,Test not started.,,
+"",,,,1,Test started.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,0,PHY_TEST_RESET,,Resets PHY PRBS test state machine and,0x0,R/W
+"",,,,,error counters.,,
+"",,,,0,Not reset.,,
+"",,,,1,Reset.,,
+0x317,PHY_PRBS_TEST_,[7:0],PHY_PRBS_,,Bits[7:0] of the 24-bit threshold value to,0x0,R/W
+"",THRESHOLD_,,THRESHOLD_,,set the error flag for the PHY PRBS test.,,
+"",LOBITS,,LOBITS,,,,
+0x318,PHY_PRBS_TEST_,[7:0],PHY_PRBS_,,Bits[15:8] of the 24-bit threshold value to,0x0,R/W
+"",THRESHOLD_,,THRESHOLD_,,set the error flag for the PHY PRBS test.,,
+"",MIDBITS,,MIDBITS,,,,
+0x319,PHY_PRBS_TEST_,[7:0],PHY_PRBS_,,Bits[23:16] of the 24-bit threshold value to,0x0,R/W
+"",THRESHOLD_HIBITS,,THRESHOLD_,,set the error flag for the PHY PRBS test.,,
+"",,,HIBITS,,,,
+0x31A,PHY_PRBS_TEST_,[7:0],PHY_PRBS_ERR_,,Bits[7:0] of the 24-bit reported PHY BER,0x0,R
+"",ERRCNT_LOBITS,,CNT_LOBITS,,error count from the selected lane.,,
+0x31B,PHY_PRBS_TEST_,[7:0],PHY_PRBS_ERR_,,Bits[15:8] of the 24-bit reported PHY BER,0x0,R
+"",ERRCNT_MIDBITS,,CNT_MIDBITS,,error count from the selected lane.,,
+0x31C,PHY_PRBS_TEST_,[7:0],PHY_PRBS_ERR_,,Bits[23:16] of the 24-bit reported PHY BER,0x0,R
+"",ERRCNT_HIBITS,,CNT_HIBITS,,error count from the selected lane.,,
+0x31D,PHY_PRBS_TEST_,[7:0],PHY_PRBS_PASS,,Reports PHY BER pass/fail for each lane.,0xFF,R
+"",STATUS,,,,Bit x is high when Lane x passes.,,
+0x31E,PHY_DATA_,[7:2],RESERVED,,Reserved.,0x0,R
+"",SNAPSHOT_CTRL,1,PHY_GRAB_MODE,,This bit determines whether to use the,0x0,R/W
+"",,,,,trigger to grab data.,,
+"",,,,0,Grab data when PHY_GRAB_DATA is set.,,
+"",,,,1,Grab data upon bit error.,,
+"",,0,PHY_GRAB_DATA,,Transitioning this bit from 0 to 1 causes,0x0,R/W
+"",,,,,the logic to store current receive data from,,
+"",,,,,one lane.,,
+0x31F,PHY_SNAPSHOT_,[7:0],PHY_SNAPSHOT_D,,Current data received. Represents,0x0,R
+"",DATA_BYTE0,,ATA_BYTE0,,PHY_SNAPSHOT_DATA[7:0].,,
+0x320,PHY_SNAPSHOT_,[7:0],PHY_SNAPSHOT_D,,Current data received. Represents,0x0,R
+"",DATA_BYTE1,,ATA_BYTE1,,PHY_SNAPSHOT_DATA[15:8].,,
+0x321,PHY_SNAPSHOT_,[7:0],PHY_SNAPSHOT_D,,Current data received. Represents,0x0,R
+"",DATA_BYTE2,,ATA_BYTE2,,PHY_SNAPSHOT_DATA[23:16].,,
+0x322,PHY_SNAPSHOT_,[7:0],PHY_SNAPSHOT_D,,Current data received. Represents,0x0,R
+"",DATA_BYTE3,,ATA_BYTE3,,PHY_SNAPSHOT_DATA[31:24].,,
+0x323,PHY_SNAPSHOT_,[7:0],PHY_SNAPSHOT_D,,Current data received. Represents,0x0,R
+"",DATA_BYTE4,,ATA_BYTE4,,PHY_SNAPSHOT_DATA[39:32].,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x32C,SHORT_TPL_TEST_0,[7:4],SHORT_TPL_SP_,,Short transport layer sample select. Selects,0x0,R/W
+"",,,SEL,,which sample to check from a specific,,
+"",,,,,DAC.,,
+"",,,,0000,Sample 0.,,
+"",,,,0001,Sample 1.,,
+"",,,,0010,Sample 2.,,
+"",,,,0011,Sample 3.,,
+"",,,,0100,Sample 4.,,
+"",,,,0101,Sample 5.,,
+"",,,,0110,Sample 6.,,
+"",,,,0111,Sample 7.,,
+"",,,,1000,Sample 8.,,
+"",,,,1001,Sample 9.,,
+"",,,,1010,Sample 10.,,
+"",,,,1011,Sample 11.,,
+"",,,,1100,Sample 12.,,
+"",,,,1101,Sample 13.,,
+"",,,,1110,Sample 14.,,
+"",,,,1111,Sample 15.,,
+"",,[3:2],SHORT_TPL_CHAN_,,Short transport layer test channel select.,0x0,R/W
+"",,,SEL,,Selects which subchannel of the DACx,,
+"",,,,,channelizer to test.,,
+"",,,,00,Channel 0.,,
+"",,,,01,Channel 1.,,
+"",,,,10,Channel 2.,,
+"",,1,SHORT_TPL_TEST_,,Short transport layer test reset. Resets the,0x0,R/W
+"",,,RESET,,result of short transport layer test.,,
+"",,,,0,Not reset.,,
+"",,,,1,Reset.,,
+"",,0,SHORT_TPL_TEST_,,Short transport layer test enable. Enable,0x0,R/W
+"",,,EN,,short transport layer test.,,
+"",,,,0,Disable.,,
+"",,,,1,Enable.,,
+0x32D,SHORT_TPL_TEST_1,[7:0],SHORT_TPL_REF_,,"Short transport layer reference sample,",0x0,R/W
+"",,,SP_LSB,,LSB. This bit field is the lower eight bits of,,
+"",,,,,the expected DAC sample during the short,,
+"",,,,,transport layer test and is used to compare,,
+"",,,,,with the received sample at the JESD204B,,
+"",,,,,receiver output.,,
+0x32E,SHORT_TPL_TEST_2,[7:0],SHORT_TPL_REF_,,Short transport layer test reference,0x0,R/W
+"",,,SP_MSB,,"sample, MSB. This bit field is the upper",,
+"",,,,,eight bits of the expected DAC sample,,
+"",,,,,during the short transport layer test and is,,
+"",,,,,used to compare with the received sample,,
+"",,,,,at the JESD204B receiver output.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x32F,SHORT_TPL_TEST_3,7,SHORT_TPL_LINK_,,For running STPL on dual-link JESD204B,0x0,R/W
+"",,,SEL,,modes. Selects whether the STPL test is,,
+"",,,,,performed on samples that are addressed to,,
+"",,,,,"the DAC0 channelizers/datapaths (Link 0), or",,
+"",,,,,the DAC1 channelizers/datapaths (Link 1).,,
+"",,,,0,Link 0 samples are tested.,,
+"",,,,1,Link 1 samples are tested.,,
+"",,6,SHORT_TPL_IQ_,,Selects which data stream (path) to test for,0x0,R/W
+"",,,SAMPLE_SEL,,"a complex subchannel of the channelizer, I",,
+"",,,,,"or Q. For nonIQ JESD204B modes, select",,
+"",,,,,the I path.,,
+"",,,,0,Select to test the I data stream.,,
+"",,,,1,Select to test the Q data stream.,,
+"",,[5:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,SHORT_TPL_FAIL,,Short transport layer test fail. This bit,0x0,R
+"",,,,,shows if the selected DAC sample matches,,
+"",,,,,the expected sample for the short,,
+"",,,,,"transport layer test. If they match, the test",,
+"",,,,,"passes. Otherwise, the test fails.",,
+"",,,,0,Test pass.,,
+"",,,,1,Test fail.,,
+0x334,JESD_BIT_INVERSE_,[7:0],JESD_BIT_INVERSE,,Logical lane invert. Each bit of this control,0x0,R/W
+"",CTRL,,,,inverses the JESD204B deserialized data,,
+"",,,,,from one specific JESD204B receiver PHY.,,
+"",,,,,Set Bit x high to invert the JESD204B,,
+"",,,,,deserialized data on Logical Lane x.,,
+0x400,DID_REG,[7:0],DID_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x401,BID_REG,[7:0],BID_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x402,LID0_REG,7,RESERVED,,Reserved.,0x0,R
+"",,6,ADJDIR_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,5,PHADJ_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[4:0],LL_LID0,,Received ILAS LID configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x403,SCR_L_REG,7,SCR_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Scrambling is disabled.,,
+"",,,,1,Scrambling is enabled.,,
+"",,[6:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],L_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,00000,1 lane per converter device.,,
+"",,,,00001,2 lanes per converter device.,,
+"",,,,00010,3 lanes per converter device.,,
+"",,,,00011,4 lanes per converter device.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x404,F_REG,[7:0],F_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,1 octet per frame.,,
+"",,,,1,2 octets per frame.,,
+"",,,,10,3 octets per frame.,,
+"",,,,11,4 octets per frame.,,
+0x405,K_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],K_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,00000,Default value.,,
+"",,,,11111,32 frames per multiframe.,,
+0x406,M_REG,[7:0],M_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x407,CS_N_REG,[7:6],CS_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,5,RESERVED,,Reserved.,0x0,R
+"",,[4:0],N_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x408,NP_REG,[7:5],SUBCLASSV_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[4:0],NP_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x409,S_REG,[7:5],JESDV_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,000,JESD204A.,,
+"",,,,001,JESD204B.,,
+"",,[4:0],S_RD_1,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x40A,HD_CF_REG,7,HD_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Low density mode.,,
+"",,,,1,High density mode.,,
+"",,[6:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],CF_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x40B,RES1_REG,[7:0],RES1_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x40C,RES2_REG,[7:0],RES2_RD,,Received ILAS configuration on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x40D,CHECKSUM0_REG,[7:0],LL_FCHK0,,Received checksum during ILAS on Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x40E,COMPSUM0_REG,[7:0],LL_FCMP0,,Computed checksum on Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x412,LID1_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID1,,Received ILAS LID configuration on Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x415,CHECKSUM1_REG,[7:0],LL_FCHK1,,Received checksum during ILAS on Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x416,COMPSUM1_REG,[7:0],LL_FCMP1,,Computed checksum on Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x41A,LID2_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID2,,Received ILAS LID configuration on Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x41D,CHECKSUM2_REG,[7:0],LL_FCHK2,,Received checksum during ILAS on Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x41E,COMPSUM2_REG,[7:0],LL_FCMP2,,Computed checksum on Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x422,LID3_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID3,,Received ILAS LID configuration on Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x425,CHECKSUM3_REG,[7:0],LL_FCHK3,,Received checksum during ILAS on Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x426,COMPSUM3_REG,[7:0],LL_FCMP3,,Computed checksum on Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x42A,LID4_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID4,,Received ILAS LID configuration on Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x42D,CHECKSUM4_REG,[7:0],LL_FCHK4,,Received checksum during ILAS on Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x42E,COMPSUM4_REG,[7:0],LL_FCMP4,,Computed checksum on Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x432,LID5_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID5,,Received ILAS LID configuration on Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x435,CHECKSUM5_REG,[7:0],LL_FCHK5,,Received checksum during ILAS on Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x436,COMPSUM5_REG,[7:0],LL_FCMP5,,Computed checksum on Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x43A,LID6_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID6,,Received ILAS LID configuration on Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x43D,CHECKSUM6_REG,[7:0],LL_FCHK6,,Received checksum during ILAS on Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x43E,COMPSUM6_REG,[7:0],LL_FCMP6,,Computed checksum on Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x442,LID7_REG,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],LL_LID7,,Received ILAS LID configuration on Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x445,CHECKSUM7_REG,[7:0],LL_FCHK7,,Received checksum during ILAS on Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x446,COMPSUM7_REG,[7:0],LL_FCMP7,,Computed checksum on Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x450,ILS_DID,[7:0],DID,,Device (link) identification number. This,0x0,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x451,ILS_BID,[7:0],BID,,"Bank ID, extension to DID. This control is",0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+0x452,ILS_LID0,7,RESERVED,,Reserved.,0x0,R
+"",,6,ADJDIR,,Direction to adjust the DAC LMFC. Link,0x0,R/W
+"",,,,,information is received on Link Lane 0 as,,
+"",,,,,specified in Section 8.3 of JESD204B. Only,,
+"",,,,,Link 0 is supported. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,5,PHADJ,,Phase adjustment request to the DAC.,0x0,R/W
+"",,,,,Only Link 0 is supported. This control is,,
+"",,,,,paged by the LINK_PAGE control in Register,,
+"",,,,,0x300.,,
+"",,[4:0],LID0,,Lane identification number (within link).,0x0,R/W
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300. This signal must,,
+"",,,,,only be programmed while the QBD is,,
+"",,,,,"held in soft reset (Register 0x475, Bit 3), and",,
+"",,,,,must not be changed during normal,,
+"",,,,,operation.,,
+0x453,ILS_SCR_L,7,SCR,,Scramble enabled for the link. This control,0x1,R/W
+"",,,,,is paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,,,0,Descrambling is disabled.,,
+"",,,,1,Descrambling is enabled.,,
+"",,[6:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],L_1,,Number of lanes per converter (minus 1).,0x7,R/W
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x454,ILS_F,[7:0],F_1,,Number of octets per frame per lane,0x0,R/W
+"",,,,,(minus 1). This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+0x455,ILS_K,[7:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],K_1,,Number of frames per multiframe (minus 1).,0x1F,R/W
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,11111,32 frames per multiframe.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x456,ILS_M,[7:0],M_1,,Number of subchannels per link (minus 1).,0x1,R/W
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x457,ILS_CS_N,[7:6],CS,,Number of control bits per sample. Only,0x0,R
+"",,,,,Link 0 is supported. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,5,RESERVED,,Reserved.,0x0,R
+"",,[4:0],N_1,,Converter resolution (minus 1). This,0xF,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+0x458,ILS_NP,[7:5],SUBCLASSV,,Device subclass version. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,,,000,Subclass 0.,,
+"",,,,001,Subclass 1.,,
+"",,[4:0],NP_1,,Total number of bits per sample (minus 1).,0xF,R/W
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+0x459,ILS_S,[7:5],JESDV,,JESD204 version. This control is paged by,0x0,R/W
+"",,,,,the LINK_PAGE control in Register 0x300.,,
+"",,,,000,JESD204A.,,
+"",,,,001,JESD204B.,,
+"",,[4:0],S_1,,Number of samples per converter per,0x1,R/W
+"",,,,,frame cycle (minus 1). This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+0x45A,ILS_HD_CF,7,HD,,"High density format, always set to 1. This",0x1,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Low density mode.,,
+"",,,,1,High density mode.,,
+"",,[6:5],RESERVED,,Reserved.,0x0,R
+"",,[4:0],CF,,Number of control bits per sample. Only,0x0,R
+"",,,,,Link 0 is supported. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+0x45B,ILS_RES1,[7:0],RES1,,Reserved field 1. This control is paged by,0x0,R/W
+"",,,,,the LINK_PAGE control in Register 0x300.,,
+0x45C,ILS_RES2,[7:0],RES2,,Reserved field 2. This control is paged by,0x0,R/W
+"",,,,,the LINK_PAGE control in Register 0x300.,,
+0x45D,ILS_CHECKSUM,[7:0],FCHK0,,Calculated link configuration checksum. This,0x0,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+0x46C,LANE_DESKEW,7,ILD7,,Interlane deskew status for Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,6,ILD6,,Interlane deskew status for Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,5,ILD5,,Interlane deskew status for Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,4,ILD4,,Interlane deskew status for Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILD3,,Interlane deskew status for Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,2,ILD2,,Interlane deskew status for Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,1,ILD1,,Interlane deskew status for Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,0,ILD0,,Interlane deskew status for Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+0x46D,BAD_DISPARITY,7,BDE7,,Bad disparity errors status for Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < error threshold (ETH)[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,BDE6,,Bad disparity errors status for Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,BDE5,,Bad disparity errors status for Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,BDE4,,Bad disparity errors status for Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,3,BDE3,,Bad disparity errors status for Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,2,BDE2,,Bad disparity errors status for Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,1,BDE1,,Bad disparity errors status for Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,0,BDE0,,Bad disparity errors status for Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+0x46E,NOT_IN_TABLE,7,NIT7,,Not in table errors status for Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT6,,Not in table errors status for Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,NIT5,,Not in table errors status for Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,NIT4,,Not in table errors status for Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,3,NIT3,,Not in table errors status for Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,2,NIT2,,Not in table errors status for Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,1,NIT1,,Not in table errors status for Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,0,NIT0,,Not in table errors status for Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x46F,UNEXPECTED_,7,UEK7,,"Unexpected K character errors status, Lane 7.",0x0,R
+"",KCHAR,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,UEK6,,"Unexpected K character errors status, Lane 6.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK5,,"Unexpected K character errors status, Lane 5.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,UEK4,,"Unexpected K character errors status, Lane 4.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,3,UEK3,,"Unexpected K character errors status, Lane 3.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,2,UEK2,,"Unexpected K character errors status, Lane 2.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,1,UEK1,,"Unexpected K character errors status, Lane 1.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,0,UEK0,,"Unexpected K character errors status, Lane 0.",0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+0x470,CODE_GRP_SYNC,7,CGS7,,Code group synchronization status for,0x0,R
+"",,,,,Lane 7. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,6,CGS6,,Code group synchronization status for,0x0,R
+"",,,,,Lane 6. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,5,CGS5,,Code group synchronization status for,0x0,R
+"",,,,,Lane 5. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,4,CGS4,,Code group synchronization status for,0x0,R
+"",,,,,Lane 4. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,3,CGS3,,Code group synchronization status for,0x0,R
+"",,,,,Lane 3. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CGS2,,Code group synchronization status for,0x0,R
+"",,,,,Lane 2. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,1,CGS1,,Code group synchronization status for,0x0,R
+"",,,,,Lane 1. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS0,,Code group synchronization status for,0x0,R
+"",,,,,Lane 0. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x471,FRAME_SYNC,7,FS7,,Frame synchronization status for Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,6,FS6,,Frame synchronization status for Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,5,FS5,,Frame synchronization status for Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,4,FS4,,Frame synchronization status for Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,3,FS3,,Frame synchronization status for Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,FS2,,Frame synchronization status for Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,1,FS1,,Frame synchronization status for Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,FS0,,Frame synchronization status for Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x472,GOOD_CHECKSUM,7,CKS7,,Computed checksum status for Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,6,CKS6,,Computed checksum status for Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,5,CKS5,,Computed checksum status for Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,4,CKS4,,Computed checksum status for Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,3,CKS3,,Computed checksum status for Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,2,CKS2,,Computed checksum status for Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,CKS1,,Computed checksum status for Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,0,CKS0,,Computed checksum status for Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x473,INIT_LANE_SYNC,7,ILS7,,Initial lane synchronization status for Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,6,ILS6,,Initial lane synchronization status for Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,5,ILS5,,Initial lane synchronization status for Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,4,ILS4,,Initial lane synchronization status for Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,3,ILS3,,Initial lane synchronization status for Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,ILS2,,Initial lane synchronization status for Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,1,ILS1,,Initial lane synchronization status for Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,ILS0,,Initial lane synchronization status for Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x475,CTRLREG0,[7:4],RESERVED,,Reserved.,0x0,R/W
+"",,3,SOFTRST,,QBD soft reset. Active high synchronous,0x0,R/W
+"",,,,,reset. Resets all hardware to power-on,,
+"",,,,,state. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,2,FORCESYNCREQ,,Command from application to assert a,0x0,R/W
+"",,,,,synchronization request. Active high. This,,
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,1,RESERVED,,Reserved.,0x0,R
+"",,0,REPL_FRM_ENA,,"When this level input is set, it enables the",0x1,R/W
+"",,,,,replacement of frames received in error.,,
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300. This signal must,,
+"",,,,,only be programmed while the QBD is,,
+"",,,,,"held in soft reset (Register 0x475, Bit 3), and",,
+"",,,,,must not be changed during normal,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x476,CTRLREG1,[7:5],RESERVED,,Reserved.,0x0,R
+"",,4,QUAL_RDERR,,Error reporting behavior for concurrent,0x1,R/W
+"",,,,,not in table (NIT) and running disparity,,
+"",,,,,(RD) errors. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300. Set,,
+"",,,,,this bit to 1. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+"",,,,0,NIT has no effect on RD error.,,
+"",,,,1,NIT error masks concurrent with RD error.,,
+"",,[3:1],RESERVED,,Reserved.,0x0,R/W
+"",,0,FCHK_N,,Checksum calculation method. This,0x0,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+"",,,,0,Checksum is calculated by summing the,,
+"",,,,,individual fields in the link configuration,,
+"",,,,,"table as defined in Section 8.3, Table 20 of",,
+"",,,,,the JESD204B standard.,,
+"",,,,1,Checksum is calculated by summing the,,
+"",,,,,registers containing the packed link,,
+"",,,,,configuration fields (sum of Register 0x450,,
+"",,,,,"to Register 0x45A, modulo 256).",,
+0x477,CTRLREG2,7,ILS_MODE,,Data link layer test mode is enabled when,0x0,R/W
+"",,,,,this bit is set to 1. CGS pattern is followed,,
+"",,,,,by a perpetual ILAS sequence. This control,,
+"",,,,,is paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+"",,,,0,Normal mode.,,
+"",,,,1,CGS pattern is followed by a perpetual,,
+"",,,,,ILAS sequence.,,
+"",,6,RESERVED,,Reserved.,0x0,R/W
+"",,5,REPDATATEST,,Repetitive data test enable using the,0x0,R/W
+"",,,,,"JTSPAT pattern. To enable the test, Bit 7 of",,
+"",,,,,this register must = 0. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,This signal must only be programmed,,
+"",,,,,while the QBD is held in soft reset,,
+"",,,,,"(Register 0x475, Bit 3), and must not be",,
+"",,,,,changed during normal operation.,,
+"",,4,QUETESTERR,,Queue test error mode. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+"",,,,0,"When this bit = 0, simultaneous errors on",,
+"",,,,,multiple lanes are reported as one error.,,
+"",,,,1,Selected when this bit = 1 and when,,
+"",,,,,REPDATATEST = 1. Detected errors from all,,
+"",,,,,lanes are trapped in a counter and,,
+"",,,,,sequentially signaled on SYNCOUTx±.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,3,AR_ECNTR,,Automatic reset of error counter. The error,0x0,R/W
+"",,,,,counter that causes assertion of SYNCOUTx±,,
+"",,,,,is automatically reset to 0 when AR_ECNTR =,,
+"",,,,,1. All other counters are unaffected. This,,
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. This signal must only be,,
+"",,,,,programmed while the QBD is held in soft,,
+"",,,,,"reset (Register 0x475, Bit 3), and must not",,
+"",,,,,be changed during normal operation.,,
+"",,[2:0],RESERVED,,Reserved.,0x0,R
+0x478,KVAL,[7:0],KSYNC,,Number of 4 × K multiframes during ILAS.,0x1,R/W
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300. This signal must,,
+"",,,,,only be programmed while the QBD is,,
+"",,,,,"held in soft reset (Register 0x475, Bit 3), and",,
+"",,,,,must not be changed during normal,,
+"",,,,,operation.,,
+0x47C,ERRORTHRES,[7:0],ETH,,Error counter threshold value. These bits,0xFF,R/W
+"",,,,,set when a SYNCOUTx± error or IRQx,,
+"",,,,,"interrupt is sent due to BD, NIT, or UEK",,
+"",,,,,errors. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300. This,,
+"",,,,,signal must only be programmed while,,
+"",,,,,the QBD is held in soft reset,,
+"",,,,,"(Register 0x475, Bit 3), and must not be",,
+"",,,,,changed during normal operation.,,
+0x47D,SYNC_ASSERT_,[7:3],RESERVED,,Reserved.,0x0,R
+"",MASK,[2:0],SYNC_ASSERT_,,"SYNCOUTx± assertion enable mask for BD,",0x7,R/W
+"",,,MASK,,"NIT, and UEK error conditions. This control",,
+"",,,,,is paged by the LINK_PAGE control in,,
+"",,,,,"Register 0x300. Active high, SYNCOUTx±",,
+"",,,,,"assertion enable mask for BD, NIT, and UEK",,
+"",,,,,"error conditions, respectively. When an",,
+"",,,,,"error counter, in any lane, has reached the",,
+"",,,,,"error threshold count, ETH[7:0], and the",,
+"",,,,,corresponding SYNC_ASSERT_MASK bit is,,
+"",,,,,"set, SYNCOUTx± is asserted. The mask bits",,
+"",,,,,are as follows (the bit sequence is reversed,,
+"",,,,,with respect to the other error count,,
+"",,,,,controls and the error counters):,,
+"",,,,,Bit 2 = bad disparity error (BDE).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = unexpected K character error (UEK).,,
+0x480,ECNT_CTRL0,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA0,,Error counter enables for Lane 0. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST0,,Reset error counters for Lane 0. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = bad disparity error (BDE).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = unexpected K character error (UEK).,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x481,ECNT_CTRL1,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA1,,Error counter enables for Lane 1. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST1,,Reset error counters for Lane 1. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x482,ECNT_CTRL2,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA2,,Error counter enables for Lane 2. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST2,,Reset error counters for Lane 2. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x483,ECNT_CTRL3,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA3,,Error counter enables for Lane 3. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST3,,Reset error counters for Lane 3. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x484,ECNT_CTRL4,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA4,,Error counter enables for Lane 4. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST4,,Reset error counters for Lane 4. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x485,ECNT_CTRL5,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA5,,Error counter enables for Lane 5. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST5,,Reset error counters for Lane 5. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x486,ECNT_CTRL6,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA6,,Error counter enables for Lane 6. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST6,,Reset error counters for Lane 6. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x487,ECNT_CTRL7,[7:6],RESERVED,,Reserved.,0x0,R
+"",,[5:3],ECNT_ENA7,,Error counter enables for Lane 7. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 5 = unexpected K character error (UEK).,,
+"",,,,,Bit 4 = not in table error (NIT).,,
+"",,,,,Bit 3 = bad disparity error (BDE).,,
+"",,[2:0],ECNT_RST7,,Reset error counters for Lane 7. This,0x7,R/W
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x488,ECNT_TCH0,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH0,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 0. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+0x489,ECNT_TCH1,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH1,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 1. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x48A,ECNT_TCH2,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH2,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 2. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+0x48B,ECNT_TCH3,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH3,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 3. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+0x48C,ECNT_TCH4,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH4,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 4. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x48D,ECNT_TCH5,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH5,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 5. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+0x48E,ECNT_TCH6,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH6,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 6. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+0x48F,ECNT_TCH7,[7:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],ECNT_TCH7,,Terminal count hold enable of error counters,0x7,R/W
+"",,,,,for Lane 7. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,,"When set, the designated counter is to",,
+"",,,,,hold the terminal count value of 0xFF,,
+"",,,,,when it is reached until the counter is,,
+"",,,,,"reset by the user. Otherwise, the",,
+"",,,,,designated counter rolls over. Counters of,,
+"",,,,,each lane are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+"",,,,,This signal must only be programmed while,,
+"",,,,,"the QBD is held in soft reset (Register 0x475,",,
+"",,,,,"Bit 3), and must not be changed during",,
+"",,,,,normal operation.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x490,ECNT_STAT0,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA0,,This output indicates if Lane 0 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR0,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 0. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,Set these bits to 1 when the,,
+"",,,,,corresponding counter terminal count,,
+"",,,,,value of 0xFF is reached. If ECNT_TCHx is,,
+"",,,,,"set, the terminal count value for the",,
+"",,,,,corresponding counter is held until the,,
+"",,,,,"counter is reset by the user; otherwise, the",,
+"",,,,,counter rolls over and continues counting.,,
+"",,,,,Counters of each lane are addressed as,,
+"",,,,,follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x491,ECNT_STAT1,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA1,,This output indicates if Lane 1 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR1,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 1. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,Set these bits to 1 when the,,
+"",,,,,corresponding counter terminal count,,
+"",,,,,value of 0xFF is reached. If ECNT_TCHx is,,
+"",,,,,"set, the terminal count value for the",,
+"",,,,,corresponding counter is held until the,,
+"",,,,,"counter is reset by the user; otherwise, the",,
+"",,,,,counter rolls over and continues counting.,,
+"",,,,,Counters of each lane are addressed as,,
+"",,,,,follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x492,ECNT_STAT2,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA2,,This output indicates if Lane 2 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR2,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 2. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,Set these bits to 1 when the corresponding,,
+"",,,,,counter terminal count value of 0xFF is,,
+"",,,,,"reached. If ECNT_TCHx is set, the terminal",,
+"",,,,,count value for the corresponding counter,,
+"",,,,,is held until the counter is reset by the,,
+"",,,,,"user; otherwise, the counter rolls over and",,
+"",,,,,continues counting. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x493,ECNT_STAT3,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA3,,This output indicates if Lane 3 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR3,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 3. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,Set these bits to 1 when the corresponding,,
+"",,,,,counter terminal count value of 0xFF is,,
+"",,,,,"reached. If ECNT_TCHx is set, the terminal",,
+"",,,,,count value for the corresponding counter,,
+"",,,,,is held until the counter is reset by the,,
+"",,,,,"user; otherwise, the counter rolls over and",,
+"",,,,,continues counting. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x494,ECNT_STAT4,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA4,,This output indicates if Lane 4 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR4,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 4. This control is paged by,,
+"",,,,,the LINK_PAGE control in Register 0x300. Set,,
+"",,,,,these bits to 1 when the corresponding,,
+"",,,,,counter terminal count value of 0xFF is,,
+"",,,,,"reached. If ECNT_TCHx is set, the terminal",,
+"",,,,,count value for the corresponding counter,,
+"",,,,,is held until the counter is reset by the,,
+"",,,,,"user; otherwise, the counter rolls over and",,
+"",,,,,continues counting. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x495,ECNT_STAT5,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA5,,This output indicates if Lane 5 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR5,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 5. This control is paged by,,
+"",,,,,the LINK_PAGE control in Register 0x300. Set,,
+"",,,,,these bits to 1 when the corresponding,,
+"",,,,,counter terminal count value of 0xFF is,,
+"",,,,,"reached. If ECNT_TCHx is set, the terminal",,
+"",,,,,count value for the corresponding counter,,
+"",,,,,is held until the counter is reset by the,,
+"",,,,,"user; otherwise, the counter rolls over and",,
+"",,,,,continues counting. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x496,ECNT_STAT6,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA6,,This output indicates if Lane 6 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR6,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 6. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,Set these bits to 1 when the corresponding,,
+"",,,,,counter terminal count value of 0xFF is,,
+"",,,,,"reached. If ECNT_TCHx is set, the terminal",,
+"",,,,,count value for the corresponding counter,,
+"",,,,,is held until the counter is reset by the,,
+"",,,,,"user; otherwise, the counter rolls over and",,
+"",,,,,continues counting. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x497,ECNT_STAT7,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,LANE_ENA7,,This output indicates if Lane 7 is enabled.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,[2:0],ECNT_TCR7,,Terminal count reached indicator of error,0x0,R
+"",,,,,counters for Lane 7. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,,,,Set these bits to 1 when the corresponding,,
+"",,,,,counter terminal count value of 0xFF is,,
+"",,,,,"reached. If ECNT_TCHx is set, the terminal",,
+"",,,,,count value for the corresponding counter,,
+"",,,,,is held until the counter is reset by the,,
+"",,,,,"user; otherwise, the counter rolls over and",,
+"",,,,,continues counting. Counters of each lane,,
+"",,,,,are addressed as follows:,,
+"",,,,,Bit 2 = unexpected K character error (UEK).,,
+"",,,,,Bit 1 = not in table error (NIT).,,
+"",,,,,Bit 0 = bad disparity error (BDE).,,
+0x4B0,LINK_STATUS0,7,BDE0,,Bad disparity errors status for Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT0,,Not in table errors status for Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK0,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 0. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD0,,Interlane deskew status for Lane 0. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,3,ILS0,,Initial lane synchronization status for Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS0,,Computed checksum status for Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS0,,Frame synchronization status for Lane 0.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS0,,Code group synchronization status for,0x0,R
+"",,,,,Lane 0. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x4B1,LINK_STATUS1,7,BDE1,,Bad disparity errors status for Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT1,,Not in table errors status for Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK1,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 1. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD1,,Interlane deskew status for Lane 1. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS1,,Initial lane synchronization status for Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS1,,Computed checksum status for Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS1,,Frame synchronization status for Lane 1.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,0,CGS1,,Code group synchronization status for,0x0,R
+"",,,,,Lane 1. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x4B2,LINK_STATUS2,7,BDE2,,Bad disparity errors status for Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT2,,Not in table errors status for Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK2,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 2. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD2,,Interlane deskew status for Lane 2. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS2,,Initial lane synchronization status for Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS2,,Computed checksum status for Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS2,,Frame synchronization status for Lane 2.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS2,,Code group synchronization status for,0x0,R
+"",,,,,Lane 2. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x4B3,LINK_STATUS3,7,BDE3,,Bad disparity errors status for Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT3,,Not in table errors status for Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK3,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 3. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD3,,Interlane deskew status for Lane 3. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS3,,Initial lane synchronization status for Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS3,,Computed checksum status for Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS3,,Frame synchronization status for Lane 3.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS3,,Code group synchronization status for,0x0,R
+"",,,,,Lane 3. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x4B4,LINK_STATUS4,7,BDE4,,Bad disparity errors status for Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT4,,Not in table errors status for Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK4,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 4. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,4,ILD4,,Interlane deskew status for Lane 4. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS4,,Initial lane synchronization status for Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS4,,Computed checksum status for Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS4,,Frame synchronization status for Lane 4.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS4,,Code group synchronization status for,0x0,R
+"",,,,,Lane 4. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x4B5,LINK_STATUS5,7,BDE5,,Bad disparity errors status for Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT5,,Not in table errors status for Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK5,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 5. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD5,,Interlane deskew status for Lane 5. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS5,,Initial lane synchronization status for Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS5,,Computed checksum status for Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,1,FS5,,Frame synchronization status for Lane 5.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS5,,Code group synchronization status for,0x0,R
+"",,,,,Lane 5. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x4B6,LINK_STATUS6,7,BDE6,,Bad disparity errors status for Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT6,,Not in table errors status for Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK6,,Unexpected K character errors status for,0x0,R
+"",,,,,Lane 6. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD6,,Interlane deskew status for Lane 6. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS6,,Initial lane synchronization status for Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS6,,Computed checksum status for Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS6,,Frame synchronization status for Lane 6.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS6,,Code group synchronization status for,0x0,R
+"",,,,,Lane 6. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x4B7,LINK_STATUS7,7,BDE7,,Bad disparity errors status for Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,6,NIT7,,Not in table errors status for Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,5,UEK7,,Unexpected K character errors status Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Error count < ETH[7:0] value.,,
+"",,,,1,Error count ≥ ETH[7:0] value.,,
+"",,4,ILD7,,Interlane deskew status for Lane 7. This,0x0,R
+"",,,,,control is paged by the LINK_PAGE control,,
+"",,,,,in Register 0x300.,,
+"",,,,0,Deskew failed.,,
+"",,,,1,Deskew achieved.,,
+"",,3,ILS7,,Initial lane synchronization status for Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,2,CKS7,,Computed checksum status for Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Checksum is incorrect.,,
+"",,,,1,Checksum is correct.,,
+"",,1,FS7,,Frame synchronization status for Lane 7.,0x0,R
+"",,,,,This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+"",,0,CGS7,,Code group synchronization status for,0x0,R
+"",,,,,Lane 7. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+"",,,,0,Synchronization lost.,,
+"",,,,1,Synchronization achieved.,,
+0x4B8,JESD_IRQ_ENABLEA,7,EN_BDE,,Bad disparity error counter. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,6,EN_NIT,,Not in table error counter. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,5,EN_UEK,,Unexpected K error counter. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,4,EN_ILD,,Interlane deskew. This control is paged by,0x0,R/W
+"",,,,,the LINK_PAGE control in Register 0x300.,,
+"",,3,EN_ILS,,Initial lane synchronization. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+"",,2,EN_CKS,,Good checksum. This bit compares two,0x0,R/W
+"",,,,,checksums: the checksum that the trans-,,
+"",,,,,mitter sent over the link during the ILAS,,
+"",,,,,and the checksum that the receiver,,
+"",,,,,calculated from the ILAS data that the,,
+"",,,,,transmitter sent over the link. The checksum,,
+"",,,,,IRQ only looks at data sent by the trans-,,
+"",,,,,mitter and not the checksum programmed,,
+"",,,,,into Register 0x45D. This control is paged,,
+"",,,,,by the LINK_PAGE control in Register 0x300.,,
+"",,1,EN_FS,,Frame synchronization. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,0,EN_CGS,,Code group synchronization. This control,0x0,R/W
+"",,,,,is paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+0x4B9,JESD_IRQ_ENABLEB,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,EN_ILAS,,Configuration mismatch (checked for Lane 0,0x0,R/W
+"",,,,,only). The ILAS IRQ compares the two sets,,
+"",,,,,of ILAS data obtained by the receiver. The,,
+"",,,,,first set of data is the ILAS data sent over,,
+"",,,,,the JESD204B link by the transmitter. The,,
+"",,,,,second set of data is the ILAS data,,
+"",,,,,programmed into the receiver via the SPI,,
+"",,,,,(Register 0x450 to Register 0x45D). If any,,
+"",,,,,"of the data differs, the IRQ is triggered. All",,
+"",,,,,"of the ILAS data, including the checksum,",,
+"",,,,,is compared. This control is paged by the,,
+"",,,,,LINK_PAGE control in Register 0x300.,,
+0x4BA,JESD_IRQ_STATUSA,7,IRQ_BDE,,Bad disparity error counter. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,6,IRQ_NIT,,Not in table error counter. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,5,IRQ_UEK,,Unexpected K error counter. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,4,IRQ_ILD,,Interlane deskew. This control is paged by,0x0,R/W
+"",,,,,the LINK_PAGE control in Register 0x300.,,
+"",,3,IRQ_ILS,,Initial lane synchronization. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,2,IRQ_CKS,,Good checksum. This control is paged by,0x0,R/W
+"",,,,,the LINK_PAGE control in Register 0x300.,,
+"",,1,IRQ_FS,,Frame synchronization. This control is,0x0,R/W
+"",,,,,paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+"",,0,IRQ_CGS,,Code group synchronization. This control,0x0,R/W
+"",,,,,is paged by the LINK_PAGE control in,,
+"",,,,,Register 0x300.,,
+0x4BB,JESD_IRQ_STATUSB,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,IRQ_ILAS,,Configuration mismatch (checked for Lane 0,0x0,R/W
+"",,,,,only). This control is paged by the LINK_PAGE,,
+"",,,,,control in Register 0x300.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x4BC,IRQ_OUTPUT_MUX_,[7:1],RESERVED,,Reserved.,0x0,R
+"",JESD,0,MUX_JESD_IRQ,,Selects which IRQ pin is connected to the,0x0,R/W
+"",,,,,JESD204B IRQx sources.,,
+"",,,,0,Route the IRQ trigger signal to the IRQ0 pin.,,
+"",,,,1,Route the IRQ trigger signal to the IRQ1 pin.,,
+0x580,BE_SOFT_OFF_,7,BE_SOFT_OFF_,,Must be 1 to use soft off/on. This control is,0x0,R/W
+"",GAIN_CTRL,,GAIN_EN,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+"",,[6:3],RESERVED,,Reserved.,0x0,R
+"",,[2:0],BE_GAIN_RAMP_,,Sets ramp rate. The gain ramps from 0 to 1,0x0,R/W
+"",,,RATE,,(or 1 to 0) in 32 steps over 2(CODE + 8) DAC,,
+"",,,,,clock periods. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+0x581,BE_SOFT_OFF_,7,ENA_SHORT_,,Enable short PA error soft off. This control,0x1,R/W
+"",ENABLE,,PAERR_SOFTOFF,,is paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+"",,6,ENA_LONG_,,Enable long PA error soft off. This control is,0x1,R/W
+"",,,PAERR_SOFTOFF,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+"",,[5:4],RESERVED,,Reserved.,0x0,R
+"",,3,ENA_JESD_ERR_,,Enable JESD204B side error soft off. This,0x0,R/W
+"",,,SOFTOFF,,control is paged by the MAINDAC_PAGE,,
+"",,,,,control in Register 0x008.,,
+"",,2,ROTATE_SOFT_,,"When set to 1, the synchronization logic",0x1,R/W
+"",,,OFF_EN,,rotation triggers the DAC output soft off.,,
+"",,,,,"Register 0x03B, Bit 0 must also be high. This",,
+"",,,,,control is paged by the MAINDAC_PAGE,,
+"",,,,,control in Register 0x008.,,
+"",,1,TXEN_SOFT_OFF_E,,"When set to 1, a TXENx falling edge",0x1,R/W
+"",,,N,,triggers the DAC output soft off. This,,
+"",,,,,control is paged by the MAINDAC_PAGE,,
+"",,,,,control in Register 0x008.,,
+"",,0,SPI_SOFT_OFF_EN,,Force a soft off when gain is 1. This control,0x0,R/W
+"",,,,,is paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x582,BE_SOFT_ON_,7,SPI_SOFT_ON_EN,,Force a soft on when gain is 0. This control,0x0,R/W
+"",ENABLE,,,,is paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+"",,6,LONG_LEVEL_,,"When set to 1, this bit enables the long",0x1,R/W
+"",,,SOFTON_EN,,level soft on. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+"",,[5:0],RESERVED,,Reserved.,0x0,R/W
+0x583,LONG_PA_THRES_,[7:0],LONG_PA_,,Long average power threshold for,0x0,R/W
+"",LSB,,THRESHOLD[7:0],,comparison. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+0x584,LONG_PA_THRES_,[7:5],RESERVED,,Reserved.,0x0,R
+"",MSB,[4:0],LONG_PA_,,Long average power threshold for,0x0,R/W
+"",,,THRESHOLD[12:8],,comparison. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x585,LONG_PA_CONTROL,7,LONG_PA_ENABLE,,Enable long average power calculation and,0x0,R/W
+"",,,,,error detection. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+"",,[6:4],RESERVED,,Reserved.,0x0,R
+"",,[3:0],LONG_PA_AVG_,,Sets length of long PA averaging time. This,0x0,R/W
+"",,,TIME,,control is paged by the MAINDAC_PAGE,,
+"",,,,,control in Register 0x008. Averaging time =,,
+"",,,,,29 + LONG_PA_AVG_TIME (PA clock periods).,,
+"",,,,,A PA clock period is calculated by the,,
+"",,,,,following:,,
+"",,,,,"If the main interpolation is >1×, PA clock",,
+"",,,,,period = 4 × main interpolation × DAC,,
+"",,,,,clock period.,,
+"",,,,,"If channel interpolation is >1×, PA clock",,
+"",,,,,period = 8 × main interpolation × DAC,,
+"",,,,,clock period.,,
+"",,,,,"Otherwise, PA clock period = 32 × DAC",,
+"",,,,,clock period.,,
+0x586,LONG_PA_POWER_,[7:0],LONG_PA_,,Long average power readback. Power,0x0,R
+"",LSB,,POWER[7:0],,detected at data bus = I2 + Q2. The data,,
+"",,,,,bus calculation only uses the 6 MSBs of the,,
+"",,,,,I and Q data bus samples. This control is,,
+"",,,,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x587,LONG_PA_POWER_,[7:5],RESERVED,,Reserved.,0x0,R
+"",MSB,[4:0],LONG_PA_,,Long average power readback. Power,0x0,R
+"",,,POWER[12:8],,detected at data bus = I2 + Q2. The data,,
+"",,,,,bus calculation only uses the 6 MSBs of the,,
+"",,,,,I and Q data bus samples. This control is,,
+"",,,,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x588,SHORT_PA_THRES_,[7:0],SHORT_PA_,,Short average power threshold for,0x0,R/W
+"",LSB,,THRESHOLD[7:0],,comparison. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+0x589,SHORT_PA_THRES_,[7:5],RESERVED,,Reserved.,0x0,R
+"",MSB,[4:0],SHORT_PA_,,Short average power threshold for,0x0,R/W
+"",,,THRESHOLD[12:8],,comparison. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+0x58A,SHORT_PA_,7,SHORT_PA_ENABLE,,Enable short average power calculation and,0x0,R/W
+"",CONTROL,,,,error detection. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+"",,[6:2],RESERVED,,Reserved.,0x0,R
+"",,[1:0],SHORT_PA_AVG_,,Sets length of short PA averaging. This,0x0,R/W
+"",,,TIME,,control is paged by the MAINDAC_PAGE,,
+"",,,,,control in Register 0x008. Averaging time =,,
+"",,,,,2SHORT_PA_AVG_TIME (PA clock periods). A PA,,
+"",,,,,clock period is calculated by the following:,,
+"",,,,,"If the main interpolation is >1×, PA clock",,
+"",,,,,period = 4 × main interpolation × DAC,,
+"",,,,,clock period.,,
+"",,,,,"If channel interpolation is >1×, PA clock",,
+"",,,,,period = 8 × main interpolation × DAC,,
+"",,,,,clock period.,,
+"",,,,,"Otherwise, PA clock period = 32 × DAC",,
+"",,,,,clock period.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x58B,SHORT_PA_POWER_,[7:0],SHORT_PA_,,Short average power readback. Power,0x0,R
+"",LSB,,POWER[7:0],,detected at data bus = I2 + Q2. The data,,
+"",,,,,bus calculation only uses the 6 MSBs of the,,
+"",,,,,I and Q data bus samples. This control is,,
+"",,,,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x58C,SHORT_PA_POWER_,[7:5],RESERVED,,Reserved.,0x0,R
+"",MSB,[4:0],SHORT_PA_,,Short average power readback. Power,0x0,R
+"",,,POWER[12:8],,detected at data bus = I2 + Q2. The data,,
+"",,,,,bus calculation only uses the 6 MSBs of the,,
+"",,,,,I and Q data bus samples. This control is,,
+"",,,,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x58D,TXEN_SM_0,[7:1],RESERVED,,Reserved.,0x1,R/W
+"",,0,ENA_TXENSM,,Enable TXEN state machine. This control is,0x0,R/W
+"",,,,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x596,BLANKING_CTRL,[7:4],RESERVED,,Reserved.,0x0,R
+"",,3,SPI_TXEN,,"If ENA_SPI_TXEN (Bit 2 of this register) = 1,",0x0,R/W
+"",,,,,the value of this register is the value of the,,
+"",,,,,TXENx status. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+"",,2,ENA_SPI_TXEN,,Enable TXENx control via the SPI by setting,0x0,R/W
+"",,,,,this bit to 1. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+"",,[1:0],RESERVED,,Reserved.,0x0,R
+0x597,JESD_PA_INT0,[7:0],JESD_PA_INT_,,Each bit enables a JESD204B PA interrupt.,0x0,R/W
+"",,,CNTRL[7:0],,Bit 8 = CGS.,,
+"",,,,,Bit 7 = frame sync.,,
+"",,,,,Bit 6 = good check sum.,,
+"",,,,,Bit 5 = initial lane sync.,,
+"",,,,,Bit 4 = interlane deskew.,,
+"",,,,,Bit 3 = bad disparity error counter.,,
+"",,,,,Bit 2 = NIT error counter.,,
+"",,,,,Bit 1= UEK error counter.,,
+"",,,,,Bit 0 = lane FIFO overflow or underflow.,,
+0x598,JESD_PA_INT1,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,JESD_PA_INT_,,Each bit enables a JESD204B PA interrupt.,0x0,R/W
+"",,,CNTRL[8],,Bit 8 = CGS,,
+"",,,,,Bit 7 = frame sync.,,
+"",,,,,Bit 6 = good check sum.,,
+"",,,,,Bit 5 = initial lane sync.,,
+"",,,,,Bit 4 = interlane deskew.,,
+"",,,,,Bit 3 = bad disparity error counter.,,
+"",,,,,Bit 2 = NIT error counter.,,
+"",,,,,Bit 1= UEK error counter.,,
+"",,,,,Bit 0 = lane FIFO overflow or underflow.,,
+0x599,TXEN_FLUSH_CTRL0,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,SPI_FLUSH_EN,,Enable datapath flush. This control is,0x1,R/W
+"",,,,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x705,NVM_LOADER_EN,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,NVM_BLR_EN,,Enable bootloader. This bit self clears when,0x0,R/W
+"",,,,,the boot loader completes or fails.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x790,DACPLL_PDCTRL0,7,PLL_PD5,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,[6:4],PLL_PD4,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,3,PLL_PD3,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value default (0).,,
+"",,2,PLL_PD2,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,1,PLL_PD1,,PLL power-down control. Write this bit to 1,0x1,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, write",,
+"",,,,,this bit to 0.,,
+"",,0,PLL_PD0,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+0x791,DACPLL_PDCTRL1,[7:5],RESERVED,,Reserved.,0x0,R/W
+"",,4,PLL_PD10,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,3,PLL_PD9,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,2,PLL_PD8,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,1,PLL_PD7,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+"",,0,PLL_PD6,,PLL power-down control. Write this bit to 1,0x0,R/W
+"",,,,,"if bypassing the PLL. If using the PLL, keep",,
+"",,,,,this value at default (0).,,
+0x792,DACPLL_CTRL0,[7:2],RESERVED,,Reserved.,0x0,R
+"",,1,D_CAL_RESET,,Resets VCO calibration.,0x1,R/W
+"",,0,D_RESET_VCO_DIV,,Setting this high holds the VCO output,0x0,R/W
+"",,,,,divider in reset. This has the effect of,,
+"",,,,,turning off the input (and output) of the,,
+"",,,,,ADC clock driver.,,
+0x793,DACPLL_CTRL1,[7:2],RESERVED,,Reserved.,0x0,R
+"",,[1:0],M_DIVIDER−1,,Programmable predivider value for PFD (in,0x0,R/W
+"",,,,,n − 1 notation). M_DIVIDER = PLL,,
+"",,,,,reference clock/PFD frequency. For,,
+"",,,,,"optimal spectral performance, choose an",,
+"",,,,,M divider setting that selects a high PFD,,
+"",,,,,frequency within the allowable PFD range.,,
+"",,,,0,Divide by 1.,,
+"",,,,1,Divide by 2.,,
+"",,,,10,Divide by 3.,,
+"",,,,11,Divide by 4.,,
+0x794,DACPLL_CTRL2,[7:6],RESERVED,,Reserved.,0x0,R/W
+"",,[5:0],DACPLL_CP,,Charge pump current control. Charge,0x4,R/W
+"",,,,,pump current = 100 μA + code × 100 μA.,,
+0x795,DACPLL_CTRL3,[7:4],RESERVED,,Reserved.,0x0,R/W
+"",,[3:0],D_CP_CALBITS,,DAC PLL optimization control.,0x8,R/W
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x796,DACPLL_CTRL4,[7:4],PLL_CTRL0,,DAC PLL optimization control.,0xD,R/W
+"",,[3:0],RESERVED,,Reserved.,0x2,R/W
+0x797,DACPLL_CTRL5,[7:6],RESERVED,,Reserved.,0x0,R/W
+"",,[5:0],PLL_CTRL1,,DAC PLL optimization control.,0x20,R/W
+0x798,DACPLL_CTRL6,7,RESERVED,,Reserved.,0x0,R
+"",,6,PLL_CTRL3,,DAC PLL optimization control.,0x0,R/W
+"",,[5:0],PLL_CTRL2,,DAC PLL optimization control.,0x1C,R/W
+0x799,DACPLL_CTRL7,[7:6],ADC_CLK_DIVIDER,,ADC clock output divider.,0x0,R/W
+"",,,,0,Divide by 1.,,
+"",,,,1,Divide by 2.,,
+"",,,,10,Divide by 3.,,
+"",,,,11,Divide by 4.,,
+"",,[5:0],N_DIVIDER,,Programmable divide by N value from,0x8,R/W
+"",,,,,2 to 50. N_DIVIDER = (DAC frequency ×,,
+"",,,,,M_DIVIDER)/(8 × reference clock frequency).,,
+0x7A0,DACPLL_CTRL9,[7:6],RESERVED,,Reserved.,0x2,R/W
+"",,5,D_EN_VAR_FINE_,,DAC PLL control.,0x0,R/W
+"",,,PRE,,,,
+"",,[4:3],RESERVED,,Reserved.,0x2,R/W
+"",,2,D_EN_VAR_,,DAC PLL control.,0x0,R/W
+"",,,COARSE_PRE,,,,
+"",,[1:0],RESERVED,,Reserved.,0x0,R/W
+0x7A2,DACPLL_CTRL10,7,RESERVED,,Reserved.,0x0,R
+"",,[6:5],D_REGULATOR_,,DAC PLL optimization control.,0x1,R/W
+"",,,CAL_WAIT,,,,
+"",,[4:3],D_VCO_CAL_WAIT,,DAC PLL optimization control.,0x2,R/W
+"",,[2:1],D_VCO_CAL_,,DAC PLL optimization control.,0x2,R/W
+"",,,CYCLES,,,,
+"",,0,RESERVED,,Reserved.,0x1,R/W
+0x7B5,PLL_STATUS,[7:1],RESERVED,,Reserved.,0x0,R
+"",,0,PLL_LOCK,,DAC PLL lock status.,0x0,R
+0x800,DDSM_HOPF_CTRL,[7:6],DDSM_HOPF_,,Frequency switch mode. This control is,0x0,R/W
+"",,,MODE,,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+"",,,,0,Phase continuous switch. Changes,,
+"",,,,,"frequency tuning word, and the phase",,
+"",,,,,accumulator continues to accumulate to,,
+"",,,,,the new FTW.,,
+"",,,,1,Phase discontinuous switch. Changes the,,
+"",,,,,frequency tuning word and resets the,,
+"",,,,,phase accumulator.,,
+"",,,,10,Phase coherent switch. This mode starts all,,
+"",,,,,32 NCO phase accumulators to begin,,
+"",,,,,counting simultaneously and all continue,,
+"",,,,,counting regardless of which individual,,
+"",,,,,NCO output is selected.,,
+"",,5,RESERVED,,Reserved.,0x0,R/W
+"",,[4:0],DDSM_HOPF_SEL,,Hopping frequency selection control.,0x0,R/W
+"",,,,,Enter the number of the FTW (from FTW 0,,
+"",,,,,to FTW31) to select the output of that,,
+"",,,,,NCO. This control is paged by the,,
+"",,,,,MAINDAC_PAGE control in Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x806,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW1. This control is,0x0,R/W
+"",FTW1_0,,FTW1[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x807,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW1. This control is,0x0,R/W
+"",FTW1_1,,FTW1[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x808,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW1. This control is,0x0,R/W
+"",FTW1_2,,FTW1[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x809,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW1. This control is,0x0,R/W
+"",FTW1_3,,FTW1[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x80A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW2. This control is,0x0,R/W
+"",FTW2_0,,FTW2[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x80B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW2. This control is,0x0,R/W
+"",FTW2_1,,FTW2[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x80C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW2. This control is,0x0,R/W
+"",FTW2_2,,FTW2[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x80D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW2. This control is,0x0,R/W
+"",FTW2_3,,FTW2[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x80E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW3. This control is,0x0,R/W
+"",FTW3_0,,FTW3[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x80F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW3. This control is,0x0,R/W
+"",FTW3_1,,FTW3[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x810,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW3. This control is,0x0,R/W
+"",FTW3_2,,FTW3[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x811,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW3. This control is,0x0,R/W
+"",FTW3_3,,FTW3[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x812,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW4. This control is,0x0,R/W
+"",FTW4_0,,FTW4[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x813,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW4. This control is,0x0,R/W
+"",FTW4_1,,FTW4[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x814,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW4. This control is,0x0,R/W
+"",FTW4_2,,FTW4[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x815,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW4. This control is,0x0,R/W
+"",FTW4_3,,FTW4[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x816,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW5. This control is,0x0,R/W
+"",FTW5_0,,FTW5[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x817,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW5. This control is,0x0,R/W
+"",FTW5_1,,FTW5[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x818,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW5. This control is,0x0,R/W
+"",FTW5_2,,FTW5[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x819,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW5. This control is,0x0,R/W
+"",FTW5_3,,FTW5[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x81A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW6. This control is,0x0,R/W
+"",FTW6_0,,FTW6[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x81B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW6. This control is,0x0,R/W
+"",FTW6_1,,FTW6[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x81C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW6. This control is,0x0,R/W
+"",FTW6_2,,FTW6[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x81D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW6. This control is,0x0,R/W
+"",FTW6_3,,FTW6[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x81E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW7. This control is,0x0,R/W
+"",FTW7_0,,FTW7[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x81F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW7. This control is,0x0,R/W
+"",FTW7_1,,FTW7[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x820,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW7. This control is,0x0,R/W
+"",FTW7_2,,FTW7[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x821,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW7. This control is,0x0,R/W
+"",FTW7_3,,FTW7[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x822,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW8. This control is,0x0,R/W
+"",FTW8_0,,FTW8[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x823,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW8. This control is,0x0,R/W
+"",FTW8_1,,FTW8[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x824,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW8. This control is,0x0,R/W
+"",FTW8_2,,FTW8[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x825,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW8. This control is,0x0,R/W
+"",FTW8_3,,FTW8[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x826,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW9. This control is,0x0,R/W
+"",FTW9_0,,FTW9[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x827,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW9. This control is,0x0,R/W
+"",FTW9_1,,FTW9[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x828,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW9. This control is,0x0,R/W
+"",FTW9_2,,FTW9[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x829,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW9. This control is,0x0,R/W
+"",FTW9_3,,FTW9[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x82A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW10. This control is,0x0,R/W
+"",FTW10_0,,FTW10[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x82B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW10. This control is,0x0,R/W
+"",FTW10_1,,FTW10[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x82C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW10. This control is,0x0,R/W
+"",FTW10_2,,FTW10[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x82D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW10. This control is,0x0,R/W
+"",FTW10_3,,FTW10[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x82E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW11. This control is,0x0,R/W
+"",FTW11_0,,FTW11[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x82F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW11. This control is,0x0,R/W
+"",FTW11_1,,FTW11[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x830,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW11. This control is,0x0,R/W
+"",FTW11_2,,FTW11[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x831,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW11. This control is,0x0,R/W
+"",FTW11_3,,FTW11[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x832,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW12. This control is,0x0,R/W
+"",FTW12_0,,FTW12[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x833,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW12. This control is,0x0,R/W
+"",FTW12_1,,FTW12[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x834,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW12. This control is,0x0,R/W
+"",FTW12_2,,FTW12[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x835,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW12. This control is,0x0,R/W
+"",FTW12_3,,FTW12[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x836,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW13. This control is,0x0,R/W
+"",FTW13_0,,FTW13[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x837,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW13. This control is,0x0,R/W
+"",FTW13_1,,FTW13[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x838,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW13. This control is,0x0,R/W
+"",FTW13_2,,FTW13[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x839,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW13. This control is,0x0,R/W
+"",FTW13_3,,FTW13[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x83A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW14. This control is,0x0,R/W
+"",FTW14_0,,FTW14[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x83B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW14. This control is,0x0,R/W
+"",FTW14_1,,FTW14[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x83C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW14. This control is,0x0,R/W
+"",FTW14_2,,FTW14[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x83D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW14. This control is,0x0,R/W
+"",FTW14_3,,FTW14[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x83E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW15. This control is,0x0,R/W
+"",FTW15_0,,FTW15[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x83F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW15. This control is,0x0,R/W
+"",FTW15_1,,FTW15[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x840,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW15. This control is,0x0,R/W
+"",FTW15_2,,FTW15[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x841,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW15. This control is,0x0,R/W
+"",FTW15_3,,FTW15[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x842,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW16. This control is,0x0,R/W
+"",FTW16_0,,FTW16[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x843,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW16. This control is,0x0,R/W
+"",FTW16_1,,FTW16[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x844,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW16. This control is,0x0,R/W
+"",FTW16_2,,FTW16[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x845,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW16. This control is,0x0,R/W
+"",FTW16_3,,FTW16[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x846,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW17. This control is,0x0,R/W
+"",FTW17_0,,FTW17[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x847,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW17. This control is,0x0,R/W
+"",FTW17_1,,FTW17[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x848,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW17. This control is,0x0,R/W
+"",FTW17_2,,FTW17[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x849,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW17. This control is,0x0,R/W
+"",FTW17_3,,FTW17[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x84A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW18. This control is,0x0,R/W
+"",FTW18_0,,FTW18[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x84B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW18. This control is,0x0,R/W
+"",FTW18_1,,FTW18[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x84C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW18. This control is,0x0,R/W
+"",FTW18_2,,FTW18[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x84D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW18. This control is,0x0,R/W
+"",FTW18_3,,FTW18[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x84E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW19. This control is,0x0,R/W
+"",FTW19_0,,FTW19[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x84F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW19. This control is,0x0,R/W
+"",FTW19_1,,FTW19[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x850,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW19. This control is,0x0,R/W
+"",FTW19_2,,FTW19[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x851,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW19. This control is,0x0,R/W
+"",FTW19_3,,FTW19[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x852,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW20. This control is,0x0,R/W
+"",FTW20_0,,FTW20[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x853,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW20. This control is,0x0,R/W
+"",FTW20_1,,FTW20[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x854,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW20. This control is,0x0,R/W
+"",FTW20_2,,FTW20[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x855,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW20. This control is,0x0,R/W
+"",FTW20_3,,FTW20[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x856,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW21. This control is,0x0,R/W
+"",FTW21_0,,FTW21[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x857,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW21. This control is,0x0,R/W
+"",FTW21_1,,FTW21[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x858,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW21. This control is,0x0,R/W
+"",FTW21_2,,FTW21[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x859,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW21. This control is,0x0,R/W
+"",FTW21_3,,FTW21[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x85A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW22. This control is,0x0,R/W
+"",FTW22_0,,FTW22[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x85B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW22. This control is,0x0,R/W
+"",FTW22_1,,FTW22[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x85C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW22. This control is,0x0,R/W
+"",FTW22_2,,FTW22[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x85D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW22. This control is,0x0,R/W
+"",FTW22_3,,FTW22[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x85E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW23. This control is,0x0,R/W
+"",FTW23_0,,FTW23[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x85F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW23. This control is,0x0,R/W
+"",FTW23_1,,FTW23[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x860,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW23. This control is,0x0,R/W
+"",FTW23_2,,FTW23[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x861,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW23. This control is,0x0,R/W
+"",FTW23_3,,FTW23[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x862,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW24. This control is,0x0,R/W
+"",FTW24_0,,FTW24[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x863,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW24. This control is,0x0,R/W
+"",FTW24_1,,FTW24[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x864,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW24. This control is,0x0,R/W
+"",FTW24_2,,FTW24[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x865,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW24. This control is,0x0,R/W
+"",FTW24_3,,FTW24[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x866,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW25. This control is,0x0,R/W
+"",FTW25_0,,FTW25[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x867,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW25. This control is,0x0,R/W
+"",FTW25_1,,FTW25[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x868,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW25. This control is,0x0,R/W
+"",FTW25_2,,FTW25[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x869,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW25. This control is,0x0,R/W
+"",FTW25_3,,FTW25[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x86A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW26. This control is,0x0,R/W
+"",FTW26_0,,FTW26[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x86B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW26. This control is,0x0,R/W
+"",FTW26_1,,FTW26[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x86C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW26. This control is,0x0,R/W
+"",FTW26_2,,FTW26[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x86D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW26. This control is,0x0,R/W
+"",FTW26_3,,FTW26[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x86E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW27. This control is,0x0,R/W
+"",FTW27_0,,FTW27[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x86F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW27. This control is,0x0,R/W
+"",FTW27_1,,FTW27[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x870,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW27. This control is,0x0,R/W
+"",FTW27_2,,FTW27[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x871,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW27. This control is,0x0,R/W
+"",FTW27_3,,FTW27[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x872,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW28. This control is,0x0,R/W
+"",FTW28_0,,FTW28[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x873,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW28. This control is,0x0,R/W
+"",FTW28_1,,FTW28[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x874,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW28. This control is,0x0,R/W
+"",FTW28_2,,FTW28[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x875,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW28. This control is,0x0,R/W
+"",FTW28_3,,FTW28[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x876,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW29. This control is,0x0,R/W
+"",FTW29_0,,FTW29[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x877,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW29. This control is,0x0,R/W
+"",FTW29_1,,FTW29[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+Addr.,Name,Bits,Bit Name,Settings,Description,Reset,Access
+0x878,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW29. This control is,0x0,R/W
+"",FTW29_2,,FTW29[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x879,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW29. This control is,0x0,R/W
+"",FTW29_3,,FTW29[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x87A,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW30. This control is,0x0,R/W
+"",FTW30_0,,FTW30[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x87B,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW30. This control is,0x0,R/W
+"",FTW30_1,,FTW30[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x87C,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW30. This control is,0x0,R/W
+"",FTW30_2,,FTW30[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x87D,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW30. This control is,0x0,R/W
+"",FTW30_3,,FTW30[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x87E,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW31. This control is,0x0,R/W
+"",FTW31_0,,FTW31[7:0],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x87F,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW31. This control is,0x0,R/W
+"",FTW31_1,,FTW31[15:8],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x880,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW31. This control is,0x0,R/W
+"",FTW31_2,,FTW31[23:16],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,
+0x881,DDSM_HOPF_,[7:0],DDSM_HOPF_,,Hopping frequency FTW31. This control is,0x0,R/W
+"",FTW31_3,,FTW31[31:24],,paged by the MAINDAC_PAGE control in,,
+"",,,,,Register 0x008.,,

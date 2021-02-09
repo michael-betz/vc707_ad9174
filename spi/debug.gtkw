@@ -1,0 +1,38 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Fri Apr 24 02:09:52 2020
+[*]
+[dumpfile] "/home/michael/sshfs/litex_test_project/vc707_gt_test/spi/dump.vcd"
+[dumpfile_mtime] "Fri Apr 24 02:07:55 2020"
+[dumpfile_size] 662930
+[savefile] "/home/michael/sshfs/litex_test_project/vc707_gt_test/spi/debug.gtkw"
+[timestart] 0
+[size] 1916 507
+[pos] -1 -1
+*-20.000000 387500 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 214
+[signals_width] 433
+[sst_expanded] 1
+[sst_vpaned_height] 60
+@28
+[color] 1
+core_jsync
+@24
+[color] 2
+analyzer_state[1:0]
+@200
+-
+@28
+core_jref
+core_link_lmfc_zero
+@200
+-
+@23
+core_link_source_source_ctrl0[3:0]
+@22
+core_link_source_source_data0[31:0]
+@28
+core_ready
+scope_clk
+[pattern_trace] 1
+[pattern_trace] 0
