@@ -16,6 +16,7 @@ from migen.genlib.resetsync import AsyncResetSynchronizer
 from migen.genlib.cdc import MultiReg
 from litex.build.generic_platform import Subsignal, Pins, IOStandard, Misc
 from litex.soc.cores import dna, uart, spi, freqmeter
+from litex.soc.interconnect import wishbone
 from litex.soc.interconnect.csr import AutoCSR
 from litex.soc.integration.builder import Builder, builder_args, builder_argdict
 from litex.soc.integration.soc_core import SoCCore
@@ -76,28 +77,28 @@ class SampleGen(Module, AutoCSR):
         adr_offset = 0x10000000
 
         # TODO can't convince Vivado to infer Block ram for this :(
-        # for m, (conv, _) in enumerate(self.source.iter_flat()):
-        #     for s in range(settings.FR_CLK * settings.S):
-        #         name = "m{:}_s{:}".format(m, s)
-        #         mem = Memory(settings.N, depth, name=name)
-        #         # setattr(self, name, mem)
-        #         self.specials += mem
-        #         sram = wishbone.SRAM(mem, we_gran=0)
-        #         self.submodules += sram
-        #         soc.register_mem(
-        #             name,
-        #             adr_offset,  # [bytes]
-        #             sram.bus,
-        #             mem.depth * 4  # [bytes]
-        #         )
-        #         p1 = mem.get_port(clock_domain="jesd")
-        #         self.specials += p1
-        #         adr_offset += 0x10000
+        for m, (conv, _) in enumerate(self.source.iter_flat()):
+            for s in range(settings.FR_CLK * settings.S):
+                name = "m{:}_s{:}".format(m, s)
+                # mem = Memory(settings.N, depth, name=name)  # doesn't work, litex bug?
+                mem = Memory(32, depth, name=name)  # half the mem goes to waste
+                self.specials += mem
+                sram = wishbone.SRAM(mem)
+                self.submodules += sram
+                soc.register_mem(
+                    name,
+                    adr_offset,  # [bytes]
+                    sram.bus,
+                    mem.depth * 4  # [bytes]
+                )
+                p1 = mem.get_port(clock_domain="jesd")
+                self.specials += p1
+                adr_offset += 0x10000
 
-        #         self.sync.jesd += [
-        #             p1.adr.eq(adr),
-        #             conv[s * settings.N: (s + 1) * settings.N].eq(p1.dat_r)
-        #         ]
+                self.sync.jesd += [
+                    p1.adr.eq(adr),
+                    conv[s * settings.N: (s + 1) * settings.N].eq(p1.dat_r)
+                ]
 
 
 class CRG(Module, AutoCSR):
