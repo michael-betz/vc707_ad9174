@@ -9,7 +9,8 @@
   ```bash
   cd litejesd204b/
   git remote add fork https://github.com/yetifrisstlama/litejesd204b.git
-  git checkout fork/master
+  git fetch fork
+  git checkout -b fork fork/master
   pip3 install -e .
   ```
 
