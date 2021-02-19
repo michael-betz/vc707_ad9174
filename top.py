@@ -7,6 +7,7 @@ Connects trough UART to litex_server on a host PC to access the internal
 control and status registers and the AD9174 SPI interface.
 """
 from sys import path
+from os.path import join
 path.append("spi")
 from migen import *
 from argparse import ArgumentParser
@@ -72,7 +73,6 @@ class SampleGen(Module, AutoCSR):
                 adr.eq(adr + 1)
             )
         ]
-
 
         adr_offset = 0x10000000
 
@@ -168,6 +168,30 @@ class CRG(Module, AutoCSR):
                 self.gtx_line_freq
             )
             print(self.qpll1)
+
+
+class LedBlinker(Module):
+    def __init__(self, f_clk=100e6, out=None):
+        """
+        for debugging clocks
+        toggles outputs at 1 Hz
+        use ClockDomainsRenamer()!
+        """
+        self.out = out
+        if out is None:
+            self.out = Signal()
+
+        ###
+
+        max_cnt = int(f_clk / 2)
+        cntr = Signal(max=max_cnt + 1)
+        self.sync += [
+            cntr.eq(cntr + 1),
+            If(cntr == max_cnt,
+                cntr.eq(0),
+                self.out.eq(~self.out)
+            )
+        ]
 
 
 class Top(SoCCore):
@@ -332,7 +356,7 @@ class Top(SoCCore):
         self.submodules.uart = uart.UARTWishboneBridge(
             p.request("serial"),
             self.clk_freq,
-            baudrate=1152000
+            baudrate=115200
         )
         self.add_wb_master(self.uart.wishbone)
 
@@ -368,6 +392,14 @@ class Top(SoCCore):
         )
         self.add_csr("analyzer")
 
+        # LEDs should blink at exactly 1 Hz
+        # LED 0: sys_clk, LED 1: tx_clk
+        self.submodules += LedBlinker(
+            self.crg.sys_clk_freq, p.request('user_led')
+        )
+        bl = LedBlinker(self.crg.tx_clk_freq, p.request('user_led'))
+        self.submodules += ClockDomainsRenamer('jesd')(bl)
+
 
 def main():
     parser = ArgumentParser(description=__doc__)
@@ -383,7 +415,7 @@ def main():
     if args.load:
         prog = soc.platform.create_programmer()
         prog.load_bitstream(
-            os.path.join(builder.gateware_dir, soc.build_name + ".bit")
+            join(builder.gateware_dir, soc.build_name + ".bit")
         )
 
 

@@ -19,7 +19,7 @@ def main():
 
 
 if __name__ == '__main__':
-    if "config" in sys.argv:
+    if "load" in sys.argv:
         prog = p.create_programmer()
         prog.load_bitstream("build/top.bit")
     else:
