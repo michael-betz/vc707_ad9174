@@ -1,6 +1,7 @@
 from time import sleep
 from collections import namedtuple
-from spi_helper import AdSpi, HmcSpi
+from spi_helper import AdSpi
+from hmc7044 import Hmc7044
 from litejesd204b.common import JESD204BSettings
 from litejesd204b.transport import seed_to_data
 
@@ -122,7 +123,7 @@ class Ad9174Init():
         self.regs = r.regs
         self.settings = settings
         self.ad = AdSpi(r)
-        self.hmc = HmcSpi(r)
+        self.hmc = Hmc7044(r)
 
     def init_hmc(self):
         hmc = self.hmc

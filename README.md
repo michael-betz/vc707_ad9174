@@ -1,4 +1,5 @@
 # AD9174 demo project
+Get the `AD9174-FMC-EBZ` demo board running on a `vc707`.
 
 # Install
   First install litex according to:
@@ -14,8 +15,10 @@
   pip3 install -e .
   ```
 
-# Clocking setup
+# External clocking setup
 ![clocking](doc/dac_clocking.png)
+
+Generating all clocks from the on-board 122.88 MHz reference should be possible but needs more work.
 
 # Building and initializing the AD9174
 
@@ -33,7 +36,8 @@ python3 top.py --load
 # Start litex server on the vc707 USB-uart port
 litex_server --uart --uart-port /dev/ttyUSB0 --uart-baudrate 115200
 
-# Open `spi/setup2.ipynb` in jupyter notebook to interact with the FPGA
+# Open `spi/setup_external_clock.ipynb` in jupyter notebook
+# to interact with the FPGA
 cd spi
 jupyter notebook
 ```
