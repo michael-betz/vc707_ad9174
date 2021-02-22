@@ -39,7 +39,7 @@ python3 top.py --load
 # At least the sys_clk one should blink at 1 Hz
 
 # Start litex server on the vc707 USB-uart port
-litex_server --uart --uart-port /dev/ttyUSB0 --uart-baudrate 115200
+litex_server --uart --uart-port /dev/ttyUSB2 --uart-baudrate 115200
 
 # Open `spi/setup_internal_clock.ipynb` in jupyter notebook
 # to interact with the FPGA
