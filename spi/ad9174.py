@@ -170,10 +170,42 @@ class Ad9174Init():
 
         wr(0x100, 0x01)  # Put digital datapath in reset
 
-        # Disable DAC PLL and config for external clock, Table 52
-        wr(0x095, 0x01)
-        wr(0x790, 0xFF)  # DACPLL_POWER_DOWN
-        wr(0x791, 0x1F)
+        useDacPll = True
+        if not useDacPll:
+            # Disable DAC PLL and config for external clock, Table 52
+            wr(0x095, 0x01)
+            wr(0x790, 0xFF)  # DACPLL_POWER_DOWN
+            wr(0x791, 0x1F)
+        else:
+            wr(0x095, 0x00)
+            wr(0x790, 0x00)
+            wr(0x791, 0x00)
+
+            wr(0x796, 0xE5)
+            wr(0x7A0, 0xBC)
+            wr(0x794, 0x08)  # DACPLL_CP: charge pump current
+
+            wr(0x797, 0x10)
+            wr(0x797, 0x20)
+            wr(0x798, 0x10)
+            wr(0x7A2, 0x7F)
+            sleep(0.1)
+
+            ADC_CLK_DIVIDER = 4  # Aux. clock output divider: 1 = off
+            M_DIVIDER = 4  # reference clock divider: 1 = off
+            N_DIVIDER = 2  # feedback divider
+            OUT_DIVIDER = 1  # 1 = off, 2, 3
+            wr(0x799, ((ADC_CLK_DIVIDER - 1) << 6) | (N_DIVIDER & 0x3F))
+            wr(0x793, (0x06 << 2) | ((M_DIVIDER - 1) & 0x03))
+            wr(0x094, OUT_DIVIDER - 1)
+            wr(0x792, 0x02)  # Reset VCO
+            wr(0x792, 0x00)
+            sleep(0.1)
+
+            dac_pll_lock = rr(0x7B5) & 0x01
+            print('DAC PLL locked:', dac_pll_lock)
+            if dac_pll_lock < 1:
+                raise RuntimeError('DAC PLL not locked :(')
 
         # ADC clock output divider = /4  (max. output freq = 3 GHz)
         #   0: Divide by 1
