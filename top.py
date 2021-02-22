@@ -31,33 +31,12 @@ from ad9174 import Ad9174Settings
 from litex_boards.platforms import vc707
 
 
-class PRBSGen(Module, AutoCSR):
-    def __init__(self, soc, settings):
-        ''' don't bother, doesn't work !!! '''
-        # TODO reverse engineer the AD9174 datapath PRBS format :(
-        self.sink = Record(settings.get_dsp_layout())
-        self.source = Record(settings.get_dsp_layout())
-
-        self.sample_prbs_en = CSRStorage(1)
-        self.submodules.prbs = PRBS15Generator(settings.N)
-
-        # Bypass if PRBS disabled (gets overridden if enabled)
-        self.comb += self.source.eq(self.sink)
-
-        for i, (conv, _) in enumerate(self.source.iter_flat()):
-            for s in range(settings.FR_CLK * settings.S):
-                self.comb += If(
-                    self.sample_prbs_en.storage,
-                    conv[s * settings.N: (s + 1) * settings.N].eq(
-                        self.prbs.o
-                    )
-                )
-
-
 class SampleGen(Module, AutoCSR):
     def __init__(self, soc, settings, depth=256):
         '''
-        Blast out samples from Memory.
+        Continuously blast out samples from Memory.
+        The `max_ind` csr specifies the maximum index when to roll over.
+
         1 Memory for each converter for each parallel sample
         '''
         self.source = Record(settings.get_dsp_layout())
@@ -76,14 +55,16 @@ class SampleGen(Module, AutoCSR):
 
         adr_offset = 0x10000000
 
-        # TODO can't convince Vivado to infer Block ram for this :(
         for m, (conv, _) in enumerate(self.source.iter_flat()):
             for s in range(settings.FR_CLK * settings.S):
                 name = "m{:}_s{:}".format(m, s)
-                # mem = Memory(settings.N, depth, name=name)  # doesn't work, litex bug?
-                mem = Memory(32, depth, name=name)  # half the mem goes to waste
+                mem = Memory(settings.N, depth, name=name)
+                # mem = Memory(32, depth, name=name)  # half the mem goes to waste
                 self.specials += mem
-                sram = wishbone.SRAM(mem)
+                sram = wishbone.SRAM(
+                    mem_or_size=mem,
+                    bus=wishbone.Interface(data_width=16)
+                )
                 self.submodules += sram
                 soc.register_mem(
                     name,
@@ -91,20 +72,29 @@ class SampleGen(Module, AutoCSR):
                     sram.bus,
                     mem.depth * 4  # [bytes]
                 )
-                p1 = mem.get_port(clock_domain="jesd")
-                self.specials += p1
-                adr_offset += 0x10000
 
+                # with mode=WRITE_FIRST vivado does only do distributed RAM
+                p1 = mem.get_port(clock_domain="jesd", mode=READ_FIRST)
+                self.specials += p1
+                # Redundant registers for (maybe) better bram timing ...
+                # TODO vivado does not want to merge them into the bram, why?
+                b_ram_out = Signal(settings.N, reset_less=True)
+                adr_ = Signal(len(self.max_ind.storage), reset_less=True)
                 self.sync.jesd += [
-                    p1.adr.eq(adr),
-                    conv[s * settings.N: (s + 1) * settings.N].eq(p1.dat_r)
+                    adr_.eq(adr),
+                    p1.adr.eq(adr_),
+
+                    b_ram_out.eq(p1.dat_r),
+                    conv[s * settings.N: (s + 1) * settings.N].eq(b_ram_out)
                 ]
+
+                adr_offset += 0x10000
 
 
 class CRG(Module, AutoCSR):
     def __init__(self, settings, f_dsp, p, serd_pads, add_rst=[]):
         '''
-        f_dsp = rate at which DSP datapath is clocked [Hz]
+        f_dsp = rate at which DSP datapath is clocked (jesd clock domain) [Hz]
         add_rst = additional reset signals for sys_clk
           must be active high and will be synchronized with sys_clk
           p = vc707 platform instance
@@ -332,11 +322,9 @@ class Top(SoCCore):
         # ----------------------------
         #  Application layer
         # ----------------------------
-        self.submodules.prbs_gen = PRBSGen(self, settings)
-        self.submodules.sample_gen = SampleGen(self, settings, 64)
+        self.submodules.sample_gen = SampleGen(self, settings, depth=4096)
         self.comb += [
-            self.prbs_gen.sink.eq(self.sample_gen.source),  # has a bypass mode
-            self.core.sink.eq(self.prbs_gen.source)
+            self.core.sink.eq(self.sample_gen.source)
         ]
 
         # ----------------------------
