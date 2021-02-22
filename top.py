@@ -102,9 +102,9 @@ class SampleGen(Module, AutoCSR):
 
 
 class CRG(Module, AutoCSR):
-    def __init__(self, settings, f_DAC, p, serd_pads, add_rst=[]):
+    def __init__(self, settings, f_dsp, p, serd_pads, add_rst=[]):
         '''
-        f_DAC = DAC sample rate [Hz]
+        f_dsp = rate at which DSP datapath is clocked [Hz]
         add_rst = additional reset signals for sys_clk
           must be active high and will be synchronized with sys_clk
           p = vc707 platform instance
@@ -114,8 +114,8 @@ class CRG(Module, AutoCSR):
         # System clock from crystal on fpga board
         self.sys_clk_freq = int(1e9 / p.default_clk_period)
 
-        # DSP rate: depends on f_DAC and dividers in AD9174 + HMC7044
-        self.tx_clk_freq = int(f_DAC / settings.DSP_CLK_DIV)
+        # DSP rate: depends on f_dsp and dividers in AD9174 + HMC7044
+        self.tx_clk_freq = int(f_dsp)
 
         # fixed serializer factor
         self.gtx_line_freq = self.tx_clk_freq * 40
@@ -196,7 +196,7 @@ class LedBlinker(Module):
 
 
 class Top(SoCCore):
-     def __init__(self, p, f_DAC, **kwargs):
+     def __init__(self, p, f_dsp, **kwargs):
         print("Top: ", p, kwargs)
 
         # ----------------------------
@@ -277,7 +277,7 @@ class Top(SoCCore):
         serd_pads = p.request("AD9174_JESD204")
 
         self.submodules.crg = CRG(
-            settings, f_DAC, p, serd_pads, [self.ctrl.reset]
+            settings, f_dsp, p, serd_pads, [self.ctrl.reset]
         )
 
         # ----------------------------
@@ -407,14 +407,14 @@ def main():
     builder_args(parser)
     parser.add_argument("--build", action="store_true", help="Build bitstream")
     parser.add_argument("--load", action="store_true", help="Load bitstream")
-    parser.add_argument("--f_DAC", default=5.12e9, help="AD9174 DAC sample rate [Hz]")
+    parser.add_argument("--f_dsp", default=322.56e6, help="DSP clock rate (see spreadsheet) [Hz]")
     args = parser.parse_args()
 
     if args.load:
         prog = vc707.Platform().create_programmer()
         prog.load_bitstream('build/vc707/gateware/vc707.bit')
     else:
-        soc = Top(vc707.Platform(), int(args.f_DAC))
+        soc = Top(vc707.Platform(), int(args.f_dsp))
         builder = Builder(soc, **builder_argdict(args))
         builder.build(run=args.build)
 

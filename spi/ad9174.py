@@ -126,6 +126,9 @@ class Ad9174Init():
         self.hmc = Hmc7044(r)
 
     def init_hmc(self):
+        '''
+        init for external 5.12 GHz sampling clock input to DAC
+        '''
         hmc = self.hmc
         hmc.init_hmc7044()
 
@@ -139,7 +142,14 @@ class Ad9174Init():
         # hmc.trigger_reseed()
         self.hmc.trigger_div_reset()
 
-    def init_ad9174(self):
+
+    def init_ad9174(self, ADC_CLK_DIV=4, USE_PLL=True, M_DIV=2, N_DIV=2, OUT_DIV=2):
+        '''
+        ADC_CLK_DIV: Aux. clock output divider: 1 = off
+        M_DIV: reference clock divider: 1 = off
+        N_DIV: feedback divider
+        OUT_DIV: output divider, 1 = off, 2 or 3
+        '''
         wr = self.ad.wr
         rr = self.ad.rr
         s = self.settings
@@ -170,12 +180,12 @@ class Ad9174Init():
 
         wr(0x100, 0x01)  # Put digital datapath in reset
 
-        useDacPll = True
-        if not useDacPll:
+        if not USE_PLL:
             # Disable DAC PLL and config for external clock, Table 52
             wr(0x095, 0x01)
             wr(0x790, 0xFF)  # DACPLL_POWER_DOWN
             wr(0x791, 0x1F)
+            wr(0x799, ((ADC_CLK_DIV - 1) << 6) | (N_DIV & 0x3F))
         else:
             wr(0x095, 0x00)
             wr(0x790, 0x00)
@@ -191,13 +201,9 @@ class Ad9174Init():
             wr(0x7A2, 0x7F)
             sleep(0.1)
 
-            ADC_CLK_DIVIDER = 4  # Aux. clock output divider: 1 = off
-            M_DIVIDER = 4  # reference clock divider: 1 = off
-            N_DIVIDER = 2  # feedback divider
-            OUT_DIVIDER = 1  # 1 = off, 2, 3
-            wr(0x799, ((ADC_CLK_DIVIDER - 1) << 6) | (N_DIVIDER & 0x3F))
-            wr(0x793, (0x06 << 2) | ((M_DIVIDER - 1) & 0x03))
-            wr(0x094, OUT_DIVIDER - 1)
+            wr(0x799, ((ADC_CLK_DIV - 1) << 6) | (N_DIV & 0x3F))
+            wr(0x793, (0x06 << 2) | ((M_DIV - 1) & 0x03))
+            wr(0x094, OUT_DIV - 1)
             wr(0x792, 0x02)  # Reset VCO
             wr(0x792, 0x00)
             sleep(0.1)
@@ -206,14 +212,6 @@ class Ad9174Init():
             print('DAC PLL locked:', dac_pll_lock)
             if dac_pll_lock < 1:
                 raise RuntimeError('DAC PLL not locked :(')
-
-        # ADC clock output divider = /4  (max. output freq = 3 GHz)
-        #   0: Divide by 1
-        #   1: Divide by 2
-        #   2: Divide by 3
-        #   3: Divide by 4
-        BIT_ADC_CLK_DIVIDER = 6
-        wr(0x799, (3 << BIT_ADC_CLK_DIVIDER) | 8)
 
         # Delay Lock Loop (DLL) Configuration
         wr(0x0C0, 0x00)  # Power-up delay line.
