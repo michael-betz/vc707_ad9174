@@ -15,10 +15,15 @@ Get the `AD9174-FMC-EBZ` demo board running on a `vc707`.
   pip3 install -e .
   ```
 
-# External clocking setup
-![clocking](doc/dac_clocking.png)
+# Internal clocking setup
+Uses the on-board 122.88 MHz crystal oscillator + 2 x PLL in the HMC7044 + PLL in the AD9174 to generate a DAC sampling clock.
 
-Generating all clocks from the on-board 122.88 MHz reference should be possible but needs more work.
+![on-board clocking](doc/dac_clocking_int.png)
+
+# External clocking setup
+Uses a external (very high quality) signal source directly as the DAC sampling clock.
+
+![external clocking](doc/dac_clocking_ext.png)
 
 # Building and initializing the AD9174
 

@@ -15,7 +15,7 @@
    id="svg5693"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="dac_clocking.svg"
-   inkscape:export-filename="dac_clocking.png"
+   inkscape:export-filename="dac_clocking_ext.png"
    inkscape:export-xdpi="268.26562"
    inkscape:export-ydpi="268.26562">
   <defs
@@ -816,18 +816,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="479.55736"
-     inkscape:cy="501.84371"
+     inkscape:zoom="1.4"
+     inkscape:cx="601.41838"
+     inkscape:cy="381.70266"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="2048"
-     inkscape:window-height="1152"
-     inkscape:window-x="1920"
-     inkscape:window-y="0"
+     inkscape:window-width="1916"
+     inkscape:window-height="1036"
+     inkscape:window-x="0"
+     inkscape:window-y="20"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0" />
   <metadata
@@ -1591,7 +1591,7 @@
          y="196.0798"
          x="180.71175"
          sodipodi:role="line"
-         id="tspan29527">AD9176 CLKIN</tspan></text>
+         id="tspan29527">AD9174 CLKIN</tspan></text>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
