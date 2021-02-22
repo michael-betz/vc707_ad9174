@@ -357,7 +357,7 @@ class Top(SoCCore):
         self.submodules.uart = uart.UARTWishboneBridge(
             p.request("serial"),
             self.clk_freq,
-            baudrate=1152000
+            baudrate=115200
         )
         self.add_wb_master(self.uart.wishbone)
 
