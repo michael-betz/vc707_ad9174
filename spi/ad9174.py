@@ -143,12 +143,23 @@ class Ad9174Init():
         self.hmc.trigger_div_reset()
 
 
-    def init_ad9174(self, ADC_CLK_DIV=4, USE_PLL=True, M_DIV=2, N_DIV=2, OUT_DIV=2):
+    def init_ad9174(
+        self,
+        ADC_CLK_DIV=4,
+        USE_PLL=True,
+        M_DIV=2,
+        N_DIV=2,
+        OUT_DIV=2,
+        SYSREF_ERR_WINDOW=2
+    ):
         '''
         ADC_CLK_DIV: Aux. clock output divider: 1 = off
         M_DIV: reference clock divider: 1 = off
         N_DIV: feedback divider
         OUT_DIV: output divider, 1 = off, 2 or 3
+        SYSREF_ERR_WINDOW:
+            Amount of jitter allowed on the SYSREF input. SYSREF jitter
+            variations larger than this trigger an interrupt. [DAC clocks]
         '''
         wr = self.ad.wr
         rr = self.ad.rr
@@ -348,7 +359,7 @@ class Ad9174Init():
         # Enable the sync logic, and set the rotation mode to reset
         # the synchronization logic upon a sync reset trigger.
         wr(0x03B, 0xF1)  # enable sync circuit (no datapath ramping)
-        wr(0x039, 0x01)  # Allowed ref jitter window (DAC clocks)
+        wr(0x039, SYSREF_ERR_WINDOW)  # Allowable ref jitter (DAC clocks)
         wr(0x036, 0x10)  # ignore the first 16 sysref edges
 
         # TODO: Table 56, setup channel datapath
