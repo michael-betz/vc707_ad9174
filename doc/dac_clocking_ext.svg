@@ -14,7 +14,7 @@
    version="1.1"
    id="svg5693"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="dac_clocking.svg"
+   sodipodi:docname="dac_clocking_ext.svg"
    inkscape:export-filename="dac_clocking_ext.png"
    inkscape:export-xdpi="268.26562"
    inkscape:export-ydpi="268.26562">
@@ -817,8 +817,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="601.41838"
-     inkscape:cy="381.70266"
+     inkscape:cx="495.56262"
+     inkscape:cy="380.36917"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -954,6 +954,29 @@
        id="path6674"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <g
+       id="g1571"
+       transform="matrix(0.76717245,0,0,0.76059962,65.550714,3.0121343)"
+       style="stroke-width:1.30911">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.865322;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect1565"
+         width="9.9322138"
+         height="6.8383789"
+         x="122.66032"
+         y="214.65976" />
+      <text
+         xml:space="preserve"
+         style="font-size:4.23333px;line-height:1.25;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;stroke-width:0.346368"
+         x="127.47826"
+         y="219.56061"
+         id="text1569"><tspan
+           sodipodi:role="line"
+           id="tspan1567"
+           x="127.47826"
+           y="219.56061"
+           style="stroke-width:0.346368">PLL</tspan></text>
+    </g>
     <rect
        y="199.64784"
        x="118.23299"
@@ -1188,55 +1211,6 @@
          y="186.64243"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;line-height:1;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';text-align:end;text-anchor:end;fill:#000000;fill-opacity:1;stroke-width:0.264583"
          id="tspan9295">CLK OUT</tspan></text>
-    <g
-       style="stroke-width:3.27260494;stroke-miterlimit:4;stroke-dasharray:none"
-       id="g10339-1"
-       transform="matrix(0.20211983,0,0,0.20211983,127.20745,224.06955)">
-      <g
-         style="fill:#ffffff;stroke:none"
-         id="g10345-9"
-         transform="matrix(1.2523434,0,0,1.2523434,-113.86979,-780.2232)">
-        <g
-           style="fill:#ffffff;stroke:none"
-           id="g10347-8">
-          <circle
-             r="17.67767"
-             cy="145.88214"
-             cx="423.91052"
-             id="path10349-1"
-             style="fill:#ffffff;stroke:none"
-             transform="matrix(0.71019436,0,0,-0.7018198,-67.543683,507.31021)" />
-        </g>
-        <path
-           id="path10351-6"
-           style="fill:#ffffff;stroke:none"
-           d="m 239.39322,404.98789 c 0.2013,1.70293 -1.0174,3.24808 -2.72033,3.44938 -1.70565,0.20131 -3.24808,-1.01741 -3.44938,-2.72033 -0.0298,-0.24212 -0.0298,-0.48694 0,-0.72905 0.2013,-1.70293 -1.01741,-3.24808 -2.72034,-3.44939 -1.70293,-0.2013 -3.24808,1.01741 -3.44938,2.72034 -0.0272,0.2421 -0.0272,0.48694 0,0.72905"
-           sodipodi:nodetypes="csssssc"
-           inkscape:connector-curvature="0" />
-      </g>
-      <g
-         transform="matrix(1.3501023,0,0,1.3501023,-136.69796,-819.80841)"
-         id="g5485-6-7-4"
-         style="stroke-width:2.42396808;stroke-miterlimit:4;stroke-dasharray:none">
-        <g
-           id="g4181-1-4-8"
-           style="stroke-width:2.42396808;stroke-miterlimit:4;stroke-dasharray:none">
-          <circle
-             r="17.67767"
-             cy="145.88214"
-             cx="423.91052"
-             transform="matrix(0.71019436,0,0,-0.7018198,-67.543683,507.31021)"
-             style="fill:none;stroke:#000000;stroke-width:3.4334085;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-             id="path11521-0-0-5" />
-        </g>
-        <path
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="csssssc"
-           d="m 239.39322,404.98789 c 0.2013,1.70293 -1.0174,3.24808 -2.72033,3.44938 -1.70565,0.20131 -3.24808,-1.01741 -3.44938,-2.72033 -0.0298,-0.24212 -0.0298,-0.48694 0,-0.72905 0.2013,-1.70293 -1.01741,-3.24808 -2.72034,-3.44939 -1.70293,-0.2013 -3.24808,1.01741 -3.44938,2.72034 -0.0272,0.2421 -0.0272,0.48694 0,0.72905"
-           style="fill:none;stroke:#000000;stroke-width:2.42396808;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="path4935-62-9-0" />
-      </g>
-    </g>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.68348px;line-height:1;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
