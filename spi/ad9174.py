@@ -4,15 +4,7 @@ from spi_helper import AdSpi
 from hmc7044 import Hmc7044
 from litejesd204b.common import JESD204BSettings
 from litejesd204b.transport import seed_to_data
-
-
-def hd(dat):
-    ''' print a hex-dump '''
-    for i, d in enumerate(dat):
-        if i % 8 == 0 and len(dat) > 8:
-            print('\n{:04x}: '.format(i), end='')
-        print('{:02x} '.format(d), end='')
-    print()
+from client_tools import hd
 
 
 class Ad9174Settings(JESD204BSettings):
