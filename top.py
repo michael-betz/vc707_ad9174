@@ -29,66 +29,7 @@ from litex.soc.interconnect.csr import CSRStorage
 from litescope import LiteScopeAnalyzer
 from ad9174 import Ad9174Settings
 from litex_boards.platforms import vc707
-
-
-class SampleGen(Module, AutoCSR):
-    def __init__(self, soc, settings, depth=256):
-        '''
-        Continuously blast out samples from Memory.
-        The `max_ind` csr specifies the maximum index when to roll over.
-
-        1 Memory for each converter for each parallel sample
-        '''
-        self.source = Record(settings.get_dsp_layout())
-
-        self.max_ind = CSRStorage(16)
-        max_ind_ = Signal.like(self.max_ind.storage)
-        self.specials += MultiReg(self.max_ind.storage, max_ind_, "jesd")
-        adr = Signal.like(self.max_ind.storage)
-        self.sync.jesd += [
-            If(adr >= max_ind_,
-                adr.eq(0)
-            ).Else(
-                adr.eq(adr + 1)
-            )
-        ]
-
-        adr_offset = 0x10000000
-
-        for m, (conv, _) in enumerate(self.source.iter_flat()):
-            for s in range(settings.FR_CLK * settings.S):
-                name = "m{:}_s{:}".format(m, s)
-                mem = Memory(settings.N, depth, name=name)
-                # mem = Memory(32, depth, name=name)  # half the mem goes to waste
-                self.specials += mem
-                sram = wishbone.SRAM(
-                    mem_or_size=mem,
-                    bus=wishbone.Interface(data_width=16)
-                )
-                self.submodules += sram
-                soc.register_mem(
-                    name,
-                    adr_offset,  # [bytes]
-                    sram.bus,
-                    mem.depth * 4  # [bytes]
-                )
-
-                # with mode=WRITE_FIRST vivado does only do distributed RAM
-                p1 = mem.get_port(clock_domain="jesd", mode=READ_FIRST)
-                self.specials += p1
-                # Redundant registers for (maybe) better bram timing ...
-                # TODO vivado does not want to merge them into the bram, why?
-                b_ram_out = Signal(settings.N, reset_less=True)
-                adr_ = Signal(len(self.max_ind.storage), reset_less=True)
-                self.sync.jesd += [
-                    adr_.eq(adr),
-                    p1.adr.eq(adr_),
-
-                    b_ram_out.eq(p1.dat_r),
-                    conv[s * settings.N: (s + 1) * settings.N].eq(b_ram_out)
-                ]
-
-                adr_offset += 0x10000
+from sample_gen import SampleGen
 
 
 class CRG(Module, AutoCSR):

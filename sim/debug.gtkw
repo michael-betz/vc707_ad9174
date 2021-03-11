@@ -1,0 +1,20 @@
+[dumpfile] "out/gateware/sim.vcd"
+[timestart] 44871011000000
+[size] 1916 507
+[pos] -1 -1
+*-31.000000 44871867000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[sst_width] 439
+[signals_width] 845
+[sst_expanded] 1
+[sst_vpaned_height] 119
+@22
+TOP.sim.source_converter0[255:0]
+TOP.sim.b_ram_out0[31:0]
+TOP.sim.memory1_dat_r[31:0]
+@23
+TOP.sim.memory0_adr[8:0]
+@22
+TOP.sim.memory0_dat_r[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
