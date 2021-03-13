@@ -79,6 +79,7 @@ def setSamples(r, samples):
 
     # signed 16 bit samples in natural order
     samples = array(samples, dtype=int16)
+    samples *= -1
 
     # pack 2 x signed 16 bit samples into one unsigned 32 bit memory word
     s_u8 = samples.tobytes()
