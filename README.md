@@ -48,9 +48,10 @@ jupyter notebook
 ```
 
 # Arbitrary Waveform Generator mode
-Clocked by external 5 GHz clock. 
-`f_dsp_clk = 312.5 MHz`. 
-Setup script in `spi/setup_external_clock.ipynb`.
+  * clocked by external 5 GHz source
+  * JESD mode = 20: FPGA provides a real-valued sample stream. 
+  * `f_dsp_clk = 312.5 MHz`: 16 samples per FPGA clock 
+  * See [setup script](spi/setup_external_clock.ipynb)
 
 ![awg mode](doc/awg.png)
 
