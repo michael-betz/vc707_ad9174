@@ -5,7 +5,7 @@ from sim_soc import SimSoC, main
 from sys import path
 path.append("..")
 path.append("../spi")
-from sample_gen import SampleGen
+from sample_gen_pulse import SampleGenPulse
 from ad9174 import Ad9174Settings
 
 
@@ -38,7 +38,7 @@ class SimSampleGen(SimSoC):
         # ----------------------------
         #  DUT
         # ----------------------------
-        self.submodules.sample_gen = SampleGen(self, settings, depth=8192)
+        self.submodules.sample_gen = SampleGenPulse(self, settings, depth=8192)
         self.add_csr("sample_gen")
 
 

@@ -91,7 +91,7 @@ def setSamples(r, samples):
 #         hd(s, 4)
         big_write(r, mem.base, s)
 
-    r.regs.sample_gen_max_ind.write(len(samples) // N_SAMPLES - 1)
+    r.regs.sample_gen_wfm_len.write(len(samples) // N_SAMPLES - 1)
 
 
 def set_trigger_freq(r, trig_freq, f_clk=312.5e6):
