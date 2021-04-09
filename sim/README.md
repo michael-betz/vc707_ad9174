@@ -14,7 +14,7 @@ in the same way as connecting to real hardware.
 ```bash
 # all 3 run at the same time in separate windows ...
 $ python3 sim_sample_gen.py
-$ litex_server --uart --uart-port socket://localhost:1111
+$ litex_server --uart --uart-port socket://localhost:1111 --bind-port 2234
 # Open test_samplegen.ipynb to interact with the simulation
 
 gtkwave out/gateware/sim.vcd

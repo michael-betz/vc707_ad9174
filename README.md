@@ -29,7 +29,7 @@ Uses an external (very high quality) signal source directly as the DAC sampling 
 
 ```bash
 # Build a bit-file for the vc707
-python3 top.py --csr-csv build/csr.csv --csr-json build/csr.json --f_dsp 307200000 --build
+python3 top.py --csr-csv build/csr.csv --csr-json build/csr.json --f_dsp 312500000 --build
 # build/csr.json contains the litex register map
 
 # Load the bit-file over the vc707 USB-jtag port
