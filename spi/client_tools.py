@@ -92,3 +92,13 @@ def setSamples(r, samples):
         big_write(r, mem.base, s)
 
     r.regs.sample_gen_max_ind.write(len(samples) // N_SAMPLES - 1)
+
+
+def set_trigger_freq(r, trig_freq, f_clk=312.5e6):
+    '''
+    Configure internal trigger rate for pulsed AWG
+
+    r:          a litex RemoteClient object
+    trig_freq:  desired trigger rate in Hz
+    '''
+    r.regs.sample_gen_trig_cnt_max.write(int(f_clk // trig_freq))
