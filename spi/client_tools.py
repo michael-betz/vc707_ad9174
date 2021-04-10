@@ -102,3 +102,13 @@ def set_trigger_freq(r, trig_freq, f_clk=312.5e6):
     trig_freq:  desired trigger rate in Hz
     '''
     r.regs.sample_gen_trig_cnt_max.write(int(f_clk // trig_freq))
+
+
+def set_trigger_ext(r, enable=True):
+    '''
+    Configure internal trigger rate for pulsed AWG
+
+    r:       a litex RemoteClient object
+    enable:  enable external trigger
+    '''
+    r.regs.sample_gen_enable_ext_trig.write(enable)

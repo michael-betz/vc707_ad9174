@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
-[*] Fri Apr  9 20:55:57 2021
+[*] Sat Apr 10 00:59:07 2021
 [*]
 [dumpfile] "/home/qdu/vc707_ad9174/sim/out/gateware/sim.vcd"
-[dumpfile_mtime] "Fri Apr  9 20:54:45 2021"
-[dumpfile_size] 245786
+[dumpfile_mtime] "Sat Apr 10 00:58:18 2021"
+[dumpfile_size] 1180312
 [savefile] "/home/qdu/vc707_ad9174/sim/debug.gtkw"
-[timestart] 100138009000000
+[timestart] 42121026400000
 [size] 1000 600
-[pos] 513 182
-*-24.959230 100138056000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -1 -1
+*-25.959230 42121110000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [sst_width] 224
 [signals_width] 222
@@ -22,12 +22,20 @@ TOP.sim.memory1_dat_r[31:0]
 TOP.sim.memory0_adr[8:0]
 TOP.sim.memory0_dat_r[31:0]
 @24
-TOP.sim.max_ind_[15:0]
 TOP.sim.adr[15:0]
+@22
+TOP.sim.wfm_len_[15:0]
+@29
+TOP.sim.ext_trig_flag
 @28
+TOP.sim.int_trig_flag
 TOP.sim.wfm_trigger
 TOP.sim.counting
-@29
 TOP.sim.wfm_last
+TOP.sim.enable_ext_trig_re
+@24
+TOP.sim.trig_cnt[24:0]
+@22
+TOP.sim.trig_cnt_max_[24:0]
 [pattern_trace] 1
 [pattern_trace] 0

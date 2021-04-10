@@ -25,6 +25,7 @@ class SimPins(Pins):
 _io = [
     ("sys_clk", 0, SimPins(1)),
     ("sys_rst", 0, SimPins(1)),
+    ("ext_trig", 0, SimPins(1)),
     ("serial", 0,
         Subsignal("source_valid", SimPins()),
         Subsignal("source_ready", SimPins()),

@@ -13,7 +13,7 @@ from litex.soc.interconnect import wishbone
 
 
 class SampleGenPulse(Module, AutoCSR):
-    def __init__(self, soc, settings, depth=256):
+    def __init__(self, soc, settings, depth=256, ext_trig_in=None):
         '''
         Continuously blast out samples from Memory.
         The `wfm_len` csr specifies the maximum index when to roll over.
@@ -26,6 +26,19 @@ class SampleGenPulse(Module, AutoCSR):
         sample.
         '''
         self.source = Record(settings.get_dsp_layout())
+
+        # external trigger
+        self.ext_trig_in = ext_trig_in
+        if ext_trig_in is None:
+            self.ext_trig_in = Signal()
+
+        # capture rising edge of ext trigger
+        ext_trig_in_jesd1 = Signal()
+        self.specials += MultiReg(self.ext_trig_in, ext_trig_in_jesd1, "jesd", n=2)
+        ext_trig_in_jesd2 = Signal()
+        self.specials += MultiReg(ext_trig_in_jesd1, ext_trig_in_jesd2, "jesd", n=2)
+        ext_trig_flag = Signal()
+        self.comb += ext_trig_flag.eq(~ext_trig_in_jesd2 & ext_trig_in_jesd1)
 
         # internal trigger
         # 25 bit enable trigger down to 312.5e6 // (1<<25) = 10Hz
@@ -41,8 +54,19 @@ class SampleGenPulse(Module, AutoCSR):
                 trig_cnt.eq(trig_cnt + 1)
             )
         ]
+        int_trig_flag = Signal()
+        self.comb += int_trig_flag.eq(trig_cnt == 1)
+
+        # internal / external trigger selection
+        self.enable_ext_trig = CSRStorage(1)
         wfm_trigger = Signal()
-        self.comb += wfm_trigger.eq(trig_cnt == 0)
+        self.sync.jesd += [
+            If(self.enable_ext_trig.storage,
+               wfm_trigger.eq(ext_trig_flag)
+            ).Else(
+               wfm_trigger.eq(int_trig_flag)
+            )
+        ]
 
         self.wfm_len = CSRStorage(16)
         # cross clock domains to jesd
