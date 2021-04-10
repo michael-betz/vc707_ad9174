@@ -38,7 +38,8 @@ class SimSampleGen(SimSoC):
         # ----------------------------
         #  DUT
         # ----------------------------
-        self.submodules.sample_gen = SampleGenPulse(self, settings, depth=8192)
+        self.submodules.sample_gen = SampleGenPulse(
+            self, settings, depth=8192, ext_trig_in=self.platform.request('ext_trig'))
         self.add_csr("sample_gen")
 
 

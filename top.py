@@ -29,7 +29,7 @@ from litex.soc.interconnect.csr import CSRStorage
 from litescope import LiteScopeAnalyzer
 from ad9174 import Ad9174Settings
 from litex_boards.platforms import vc707
-from sample_gen import SampleGen
+from sample_gen_pulse import SampleGenPulse
 
 
 class CRG(Module, AutoCSR):
@@ -263,7 +263,9 @@ class Top(SoCCore):
         # ----------------------------
         #  Application layer
         # ----------------------------
-        self.submodules.sample_gen = SampleGen(self, settings, depth=4096)
+        # self.submodules.sample_gen = SampleGen(self, settings, depth=4096)
+        self.submodules.sample_gen = SampleGenPulse(
+            self, settings, depth=8192, ext_trig_in=p.request('user_sma_gpio_p'))
         self.comb += [
             self.core.sink.eq(self.sample_gen.source)
         ]
