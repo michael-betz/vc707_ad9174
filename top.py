@@ -338,12 +338,12 @@ def main():
     builder_args(parser)
     parser.add_argument("--build", action="store_true", help="Build bitstream")
     parser.add_argument("--load", action="store_true", help="Load bitstream")
-    parser.add_argument("--f_dsp", default=322.56e6, help="DSP clock rate (see spreadsheet) [Hz]")
+    parser.add_argument("--f_dsp", default=312.5e6, help="DSP clock rate (see spreadsheet) [Hz]")
     args = parser.parse_args()
 
     if args.load:
         prog = vc707.Platform().create_programmer()
-        prog.load_bitstream('build/vc707/gateware/vc707.bit')
+        prog.load_bitstream('build/xilinx_vc707/gateware/xilinx_vc707.bit')
     else:
         soc = Top(vc707.Platform(), int(args.f_dsp))
         builder = Builder(soc, **builder_argdict(args))
