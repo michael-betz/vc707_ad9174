@@ -9,7 +9,9 @@ control and status registers and the AD9174 SPI interface.
 from sys import path
 from os.path import join
 path.append("spi")
-from migen import *
+# from migen import *
+from migen import (Module, ClockDomain, Signal, reduce, or_,
+                   Instance, ResetSignal, ClockSignal, If, ClockDomainsRenamer)
 from argparse import ArgumentParser
 from collections import namedtuple
 from litex.build.io import DifferentialInput
@@ -83,7 +85,7 @@ class CRG(Module, AutoCSR):
             self.sys_clk_freq,
             clk=ClockSignal('jesd')
         )
-        
+
 
 class LedBlinker(Module):
     def __init__(self, f_clk=100e6, out=None):
@@ -142,7 +144,7 @@ class Top(SoCCore):
         print(settings)
 
         for c in [
-            "control", "dna", "crg_fmc1", "f_ref", "spi_fmc1", "sample_gen", "prbs_gen"
+            "control", "dna", "crg", "f_ref", "spi_fmc1", "spi_fmc2", "sample_gen", "prbs_gen"
         ]:
             self.add_csr(c)
 
@@ -153,7 +155,8 @@ class Top(SoCCore):
         #  Ports
         # ----------------------------
         p.add_extension([
-            ("AD9174_JESD204_FMC1", 0,
+            (
+                "AD9174_JESD204_FMC1", 0,
                 # CLK comes from HMC7044 CLKOUT12, goes to GTX (312.5 MHz)
                 Subsignal("clk_p", Pins("FMC1_HPC:GBTCLK0_M2C_C_P")),
                 Subsignal("clk_n", Pins("FMC1_HPC:GBTCLK0_M2C_C_N")),
@@ -177,7 +180,8 @@ class Top(SoCCore):
                 Subsignal("sysref_p", Pins("FMC1_HPC:LA00_CC_P"), IOStandard("LVDS")),
                 Subsignal("sysref_n", Pins("FMC1_HPC:LA00_CC_N"), IOStandard("LVDS"))
             ),
-            ("AD9174_SPI_FMC1", 0,
+            (
+                "AD9174_SPI_FMC1", 0,
                 # FMC_CS1 (AD9174), FMC_CS2 (HMC7044)
                 Subsignal("cs_n", Pins("FMC1_HPC:LA04_N FMC1_HPC:LA05_P")),
                 Subsignal("miso", Pins("FMC1_HPC:LA04_P"), Misc("PULLUP TRUE")),
@@ -186,7 +190,8 @@ class Top(SoCCore):
                 Subsignal("spi_en", Pins("FMC1_HPC:LA05_N")),
                 IOStandard("LVCMOS18")
             ),
-            ("AD9174_JESD204_FMC2", 0,
+            (
+                "AD9174_JESD204_FMC2", 0,
                 # CLK comes from HMC7044 CLKOUT12, goes to GTX (312.5 MHz)
                 Subsignal("clk_p", Pins("FMC2_HPC:GBTCLK0_M2C_C_P")),
                 Subsignal("clk_n", Pins("FMC2_HPC:GBTCLK0_M2C_C_N")),
@@ -210,7 +215,8 @@ class Top(SoCCore):
                 Subsignal("sysref_p", Pins("FMC2_HPC:LA00_CC_P"), IOStandard("LVDS")),
                 Subsignal("sysref_n", Pins("FMC2_HPC:LA00_CC_N"), IOStandard("LVDS"))
             ),
-            ("AD9174_SPI_FMC2", 0,
+            (
+                "AD9174_SPI_FMC2", 0,
                 # FMC_CS1 (AD9174), FMC_CS2 (HMC7044)
                 Subsignal("cs_n", Pins("FMC2_HPC:LA04_N FMC2_HPC:LA05_P")),
                 Subsignal("miso", Pins("FMC2_HPC:LA04_P"), Misc("PULLUP TRUE")),
@@ -224,6 +230,7 @@ class Top(SoCCore):
         serd_pads_fmc1 = p.request("AD9174_JESD204_FMC1")
         serd_pads_fmc2 = p.request("AD9174_JESD204_FMC2")
 
+        # use FMC1 to receive JESD_CLK (312.5MHz) and SYSREF (3.9MHz)
         self.submodules.crg = CRG(
             settings, f_dsp, p, serd_pads_fmc1, [self.ctrl.reset]
         )
@@ -235,30 +242,43 @@ class Top(SoCCore):
 
         # The two GTX quad PLLs for up to 16 lanes
         # These are taken care of and reset by GTXInit()
-
         qplls = []
-        for ix in range((2 * settings.L) // 4):
-            qpll = GTXQuadPLL(
-                self.crg.refclk0,
-                self.crg.tx_clk_freq,
-                self.crg.gtx_line_freq
-            )
-            qplls.append(qpll)
-            self.submodules += qpll
+        fmc_info = {
+            'fmc1': {
+                'id': 1,
+                'qplls': [],
+                'serd_pads': serd_pads_fmc1,
+                'phys': []
+            },
+            'fmc2': {
+                'id': 1,
+                'qplls': [],
+                'serd_pads': serd_pads_fmc2,
+                'phys': []
+            }
+        }
 
-        # XXX handle two FMCs
-        phys = []
+        for name, fmc in fmc_info.items():
+            for ix in range((settings.L) // 4):
+                qpll = GTXQuadPLL(
+                    self.crg.refclk0,
+                    self.crg.tx_clk_freq,
+                    self.crg.gtx_line_freq
+                )
+                fmc['qplls'].append(qpll)
+                self.submodules += qpll
 
-        for i, serd_pads in enumerate([serd_pads_fmc1, serd_pads_fmc2]):
-            for j, (tx_p, tx_n) in enumerate(zip(serd_pads.tx_p, serd_pads.tx_n)):
+            for j, (tx_p, tx_n) in enumerate(
+                    zip(fmc['serd_pads'].tx_p, fmc['serd_pads'].tx_n)):
                 phy = JESD204BPhyTX(
-                    qplls[i + j // 4],
-                    TxPNTuple(tx_p, tx_n),
-                    self.crg.sys_clk_freq,
+                    pll=fmc['qplls'][j // 4],
+                    tx_pads=TxPNTuple(tx_p, tx_n),
+                    sys_clk_freq=self.crg.sys_clk_freq,
                     transceiver="gtx",
                     # on `AD9172_FMC_EBZ` SERDIN 0 - 3 are of __inverted__ polarity!
-                    polarity=1 if i <= 3 else 0
+                    polarity=1 if j <= 3 else 0
                 )
+                # period = 1 / 312.5 = 3.2 ns
                 p.add_period_constraint(
                     phy.transmitter.cd_tx.clk,
                     1e9 / self.crg.tx_clk_freq
@@ -268,15 +288,20 @@ class Top(SoCCore):
                     self.crg.cd_sys.clk,
                     phy.transmitter.cd_tx.clk
                 )
-                phys.append(phy)
-                setattr(self, 'phy{}'.format(i), phy)
+                fmc['phys'].append(phy)
+                setattr(self, 'phy{}'.format(fmc['id'] + j), phy)
 
-        print(phys)
-        self.submodules.core = LiteJESD204BCoreTX(
-            phys,
+        self.submodules.core1 = LiteJESD204BCoreTX(
+            fmc_info['fmc1']['phys'],
             settings
         )
-        self.submodules.control = LiteJESD204BCoreControl(self.core, phys)
+        self.submodules.control1 = LiteJESD204BCoreControl(self.core1, fmc_info['fmc1']['phys'])
+
+        self.submodules.core2 = LiteJESD204BCoreTX(
+            fmc_info['fmc2']['phys'],
+            settings
+        )
+        self.submodules.control2 = LiteJESD204BCoreControl(self.core2, fmc_info['fmc2']['phys'])
 
         jsync_fmc1 = Signal()
         jsync_fmc2 = Signal()
@@ -292,7 +317,8 @@ class Top(SoCCore):
         # ----------------------------
         jsync = Signal()
         self.comb += jsync.eq(jsync_fmc1 & jsync_fmc2)
-        self.core.register_jsync(jsync)
+        self.core1.register_jsync(jsync)
+        self.core2.register_jsync(jsync)
         self.comb += p.request('user_led').eq(jsync)
 
         # ----------------------------
@@ -302,7 +328,8 @@ class Top(SoCCore):
         self.specials += DifferentialInput(
             serd_pads_fmc1.sysref_p, serd_pads_fmc1.sysref_n, j_ref
         )
-        self.core.register_jref(j_ref)
+        self.core1.register_jref(j_ref)
+        self.core2.register_jref(j_ref)
         self.submodules.f_ref = freqmeter.FreqMeter(
             self.sys_clk_freq,
             clk=j_ref
@@ -315,7 +342,7 @@ class Top(SoCCore):
         self.submodules.sample_gen = SampleGenPulse(
             self, settings, depth=8192, ext_trig_in=p.request('user_sma_gpio_p'))
         self.comb += [
-            self.core.sink.eq(self.sample_gen.source)
+            self.core1.sink.eq(self.sample_gen.source)
         ]
 
         # ----------------------------
@@ -325,6 +352,14 @@ class Top(SoCCore):
         self.comb += spi_pads_fmc1.spi_en.eq(0)
         self.submodules.spi_fmc1 = spi.SPIMaster(
             spi_pads_fmc1,
+            32,
+            self.clk_freq,
+            int(1e6)
+        )
+        spi_pads_fmc2 = p.request("AD9174_SPI_FMC2")
+        self.comb += spi_pads_fmc2.spi_en.eq(0)
+        self.submodules.spi_fmc2 = spi.SPIMaster(
+            spi_pads_fmc2,
             32,
             self.clk_freq,
             int(1e6)
@@ -350,18 +385,18 @@ class Top(SoCCore):
         # Analyzer
         analyzer_groups = {
             0: [
-                self.core.ready,
-                self.core.jsync,
-                self.core.jref,
+                self.core1.ready,
+                self.core1.jsync,
+                self.core1.jref,
 
-                self.core.link0.fsm,
-                self.core.link0.source.data,
-                self.core.link0.source.ctrl,
+                self.core1.link0.fsm,
+                self.core1.link0.source.data,
+                self.core1.link0.source.ctrl,
 
-                self.core.lmfc.count,
-                self.core.lmfc.zero,
-                self.core.lmfc.jref,
-                self.core.lmfc.is_load
+                self.core1.lmfc.count,
+                self.core1.lmfc.zero,
+                self.core1.lmfc.jref,
+                self.core1.lmfc.is_load
             ]
         }
         self.submodules.analyzer = LiteScopeAnalyzer(
