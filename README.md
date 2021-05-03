@@ -21,7 +21,7 @@ Uses the on-board 122.88 MHz crystal oscillator + 2 x PLL in the HMC7044 + PLL i
 ![on-board clocking](doc/dac_clocking_int.png)
 
 # External clocking setup
-Uses an external (very high quality) signal source directly as the DAC sampling clock.
+Uses an external (very high quality) signal source as the DAC sampling clock, tested using 5GHz directly, or 1GHz through the DAC PLL, to provide 5GHz DAC clock.
 
 ![external clocking](doc/dac_clocking_ext.png)
 

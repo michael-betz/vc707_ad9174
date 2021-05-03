@@ -633,3 +633,22 @@ class Ad9174Init():
                 ))
         self.regs.control_stpl_enable.write(0)
         return test_fail
+
+    def init_ad9174_pllx5(self):
+        '''
+        use 1GHz external clock to generate 5GHz DAC clock
+
+        f_dac = 5GHz
+        f_ref = 1GHz
+
+        f_vco = 10GHz
+        f_pfd = 250MHz
+        OUT_DIV = f_vco / f_dac = 2
+        M = f_ref / f_pfd = 4
+        N = f_vco / f_pfd / 8 = 5
+        '''
+        return self.init_ad9174(
+            ADC_CLK_DIV=4, USE_PLL=True, M_DIV=4, N_DIV=5, OUT_DIV=2)
+
+    def enable_transmit(self):
+        self.ad.wr(0x596, (1 << 3) | (1 << 2))
