@@ -6,33 +6,27 @@ Contains the gateware needed to establish the jesd204b link.
 Connects trough UART to litex_server on a host PC to access the internal
 control and status registers and the AD9174 SPI interface.
 """
-from sys import path
-from os.path import join
-path.append("spi")
-# from migen import *
 from migen import (Module, ClockDomain, Signal, reduce, or_,
                    Instance, ResetSignal, ClockSignal, If, ClockDomainsRenamer)
 from argparse import ArgumentParser
 from collections import namedtuple
 from litex.build.io import DifferentialInput
 from migen.genlib.resetsync import AsyncResetSynchronizer
-from migen.genlib.cdc import MultiReg
 from litex.build.generic_platform import Subsignal, Pins, IOStandard, Misc
 from litex.soc.cores import dna, uart, spi, freqmeter
-from litex.soc.interconnect import wishbone
 from litex.soc.interconnect.csr import AutoCSR
 from litex.soc.integration.builder import Builder, builder_args, builder_argdict
 from litex.soc.integration.soc_core import SoCCore
 from litejesd204b.phy.gtx import GTXQuadPLL
-from litejesd204b.phy.prbs import PRBS15Generator
 from litejesd204b.phy import JESD204BPhyTX
 from litejesd204b.core import LiteJESD204BCoreTX, LiteJESD204BCoreControl
-from litex.soc.interconnect.csr import CSRStorage
 from litescope import LiteScopeAnalyzer
-from ad9174 import Ad9174Settings
 from litex_boards.platforms import vc707
-from sample_gen_pulse import SampleGenPulse
+from sample_gen_pulse import TriggerGen, SampleGenPulse
 
+from sys import path
+path.append("spi")
+from ad9174 import Ad9174Settings
 
 class CRG(Module, AutoCSR):
     def __init__(self, settings, f_dsp, p, serd_pads, add_rst=[]):
@@ -275,7 +269,7 @@ class Top(SoCCore):
                     tx_pads=TxPNTuple(tx_p, tx_n),
                     sys_clk_freq=self.crg.sys_clk_freq,
                     transceiver="gtx",
-                    # on `AD9172_FMC_EBZ` SERDIN 0 - 3 are of __inverted__ polarity!
+                    # `AD9172_FMC_EBZ` SERDIN 0-3 are of __inverted__ polarity!
                     polarity=1 if j <= 3 else 0
                 )
                 # period = 1 / 312.5 = 3.2 ns
@@ -295,13 +289,15 @@ class Top(SoCCore):
             fmc_info['fmc1']['phys'],
             settings
         )
-        self.submodules.control1 = LiteJESD204BCoreControl(self.core1, fmc_info['fmc1']['phys'])
+        self.submodules.control1 = LiteJESD204BCoreControl(
+            self.core1, fmc_info['fmc1']['phys'])
 
         self.submodules.core2 = LiteJESD204BCoreTX(
             fmc_info['fmc2']['phys'],
             settings
         )
-        self.submodules.control2 = LiteJESD204BCoreControl(self.core2, fmc_info['fmc2']['phys'])
+        self.submodules.control2 = LiteJESD204BCoreControl(
+            self.core2, fmc_info['fmc2']['phys'])
 
         jsync_fmc1 = Signal()
         jsync_fmc2 = Signal()
@@ -339,11 +335,20 @@ class Top(SoCCore):
         #  Application layer
         # ----------------------------
         # self.submodules.sample_gen = SampleGen(self, settings, depth=4096)
-        self.submodules.sample_gen = SampleGenPulse(
-            self, settings, depth=8192, ext_trig_in=p.request('user_sma_gpio_p'))
-        self.comb += [
-            self.core1.sink.eq(self.sample_gen.source)
-        ]
+        self.submodules.trigger = TriggerGen(
+            ext_trig_in=p.request('user_sma_gpio_p'))
+        self.submodules.sample_gen1 = SampleGenPulse(
+            self, settings, depth=8192,
+            wfm_trigger=self.trigger.wfm_trigger,
+            idx=0,
+            adr_offset=0x10000000)
+        self.submodules.sample_gen2 = SampleGenPulse(
+            self, settings, depth=8192,
+            wfm_trigger=self.trigger.wfm_trigger,
+            idx=1,
+            adr_offset=0x10100000)
+        self.comb += self.core1.sink.eq(self.sample_gen1.source)
+        self.comb += self.core2.sink.eq(self.sample_gen2.source)
 
         # ----------------------------
         #  SPI master

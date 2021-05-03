@@ -67,14 +67,14 @@ class TriggerGen(Module, AutoCSR):
 
 class SampleGenPulse(Module, AutoCSR):
     def __init__(self, soc, settings, depth=256,
-                 wfm_trigger=None, adr_offset=0x10000000):
+                 wfm_trigger=None, adr_offset=0x10000000, idx=0):
         '''
-        depth: max. number of samples which can be stored (multiple of 16)
-
         registers:
-        `enable_ext_trig`:  enable external trigger
-        `wfm_len`:          waveform length after trigger.
-        `trig_cnt_max`:     max pieriod of cycle count in internal trigger
+        `depth`:            max. number of samples which can be stored,
+                            must be multiple of 16
+        `wfm_trigger`:      trigger signal to start playing buffer
+        `adr_offset`:       global memory address
+        `idx`:              index of fmc board
 
         Use 32 bit wide block ram for 1:1 mapping on the wishbone bus
         These memories are mapped to the S * 16 bit parallel samples
@@ -118,10 +118,10 @@ class SampleGenPulse(Module, AutoCSR):
         # For each converter channel
         for m, (conv, _) in enumerate(self.source.iter_flat()):
             # How many 32 bit memories do we need to hold all parallel samples
-            n_mems = ceil(len(conv) / 32)
+            n_mems = ceil(len(conv) / 32)  # = 8
             # For each 32 bit memory
             for n_mem in range(n_mems):
-                name = "m{:}_n{:}".format(m, n_mem)
+                name = "d{:}_m{:}_n{:}".format(idx, m, n_mem)
 
                 # This generates 32 bit wide blockram, wishbone access is 1:1
                 # divide depth by 16 because we provide 16 samples in parallel

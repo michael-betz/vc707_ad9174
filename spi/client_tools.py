@@ -66,11 +66,12 @@ def big_write(r, addr, datas, chunk_size=255):
         s_index += chunk_size
 
 
-def setSamples(r, samples):
+def setSamples(r, samples, idx=0):
     '''
     Write sample memory of arbitrary waveform generator
 
-    r: a litex RemoteClient object
+    r:      a litex RemoteClient object
+    idx:    index of fmc board
     samples: numpy array of dtype int16
              len(samples) will be clipped to the next multiple of 16
     '''
@@ -86,7 +87,7 @@ def setSamples(r, samples):
     s_u32 = np.frombuffer(s_u8, dtype=np.uint32)
 
     for n in range(N_MEM):
-        mem = getattr(r.mems, f'm0_n{n}')
+        mem = getattr(r.mems, f'd{idx}_m0_n{n}')
         s = s_u32[n::N_MEM]
 #         hd(s, 4)
         big_write(r, mem.base, s)
