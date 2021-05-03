@@ -1,7 +1,7 @@
 '''
 helper functions to make litex RemoteClient easier to use
 '''
-from numpy import *
+import numpy as np
 
 
 def getId(r):
@@ -53,7 +53,7 @@ def big_write(r, addr, datas, chunk_size=255):
     datas: list or numpy array of dtype uint32
     chunk_size: how many words to write in one Etherbone transaction
     '''
-    datas = array(datas, dtype=uint32)
+    datas = np.array(datas, dtype=np.uint32)
     s_index = 0
     while True:
         dat = datas[s_index: s_index + chunk_size]
@@ -78,12 +78,12 @@ def setSamples(r, samples):
     N_SAMPLES = 16  # parallel samples / dsp clock cycle
 
     # signed 16 bit samples in natural order
-    samples = array(samples, dtype=int16)
+    samples = np.array(samples, dtype=np.int16)
     samples *= -1
 
     # pack 2 x signed 16 bit samples into one unsigned 32 bit memory word
     s_u8 = samples.tobytes()
-    s_u32 = frombuffer(s_u8, dtype=uint32)
+    s_u32 = np.frombuffer(s_u8, dtype=np.uint32)
 
     for n in range(N_MEM):
         mem = getattr(r.mems, f'm0_n{n}')
@@ -101,7 +101,7 @@ def set_trigger_freq(r, trig_freq, f_clk=312.5e6):
     r:          a litex RemoteClient object
     trig_freq:  desired trigger rate in Hz
     '''
-    r.regs.sample_gen_trig_cnt_max.write(int(f_clk // trig_freq))
+    r.regs.trigger_trig_cnt_max.write(int(f_clk // trig_freq))
 
 
 def set_trigger_ext(r, enable=True):
@@ -111,4 +111,4 @@ def set_trigger_ext(r, enable=True):
     r:       a litex RemoteClient object
     enable:  enable external trigger
     '''
-    r.regs.sample_gen_enable_ext_trig.write(enable)
+    r.regs.trigger_enable_ext_trig.write(enable)

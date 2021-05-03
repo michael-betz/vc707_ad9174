@@ -134,7 +134,6 @@ class Ad9174Init():
         # hmc.trigger_reseed()
         self.hmc.trigger_div_reset()
 
-
     def init_ad9174(
         self,
         ADC_CLK_DIV=4,

@@ -6,30 +6,27 @@ Contains the gateware needed to establish the jesd204b link.
 Connects trough UART to litex_server on a host PC to access the internal
 control and status registers and the AD9174 SPI interface.
 """
-from sys import path
-from os.path import join
-path.append("spi")
-from migen import *
+from migen import (Module, ClockDomain, Signal, reduce, or_,
+                   Instance, ResetSignal, ClockSignal, If, ClockDomainsRenamer)
 from argparse import ArgumentParser
 from collections import namedtuple
 from litex.build.io import DifferentialInput
 from migen.genlib.resetsync import AsyncResetSynchronizer
-from migen.genlib.cdc import MultiReg
 from litex.build.generic_platform import Subsignal, Pins, IOStandard, Misc
 from litex.soc.cores import dna, uart, spi, freqmeter
-from litex.soc.interconnect import wishbone
 from litex.soc.interconnect.csr import AutoCSR
 from litex.soc.integration.builder import Builder, builder_args, builder_argdict
 from litex.soc.integration.soc_core import SoCCore
 from litejesd204b.phy.gtx import GTXQuadPLL
-from litejesd204b.phy.prbs import PRBS15Generator
 from litejesd204b.phy import JESD204BPhyTX
 from litejesd204b.core import LiteJESD204BCoreTX, LiteJESD204BCoreControl
-from litex.soc.interconnect.csr import CSRStorage
 from litescope import LiteScopeAnalyzer
-from ad9174 import Ad9174Settings
 from litex_boards.platforms import vc707
-from sample_gen_pulse import SampleGenPulse
+from sample_gen_pulse import TriggerGen, SampleGenPulse
+
+from sys import path
+path.append("spi")
+from ad9174 import Ad9174Settings
 
 
 class CRG(Module, AutoCSR):
@@ -119,7 +116,8 @@ class LedBlinker(Module):
         cntr = Signal(max=max_cnt + 1)
         self.sync += [
             cntr.eq(cntr + 1),
-            If(cntr == max_cnt,
+            If(
+                cntr == max_cnt,
                 cntr.eq(0),
                 self.out.eq(~self.out)
             )
@@ -127,7 +125,7 @@ class LedBlinker(Module):
 
 
 class Top(SoCCore):
-     def __init__(self, p, f_dsp, **kwargs):
+    def __init__(self, p, f_dsp, **kwargs):
         print("Top: ", p, kwargs)
 
         # ----------------------------
@@ -170,7 +168,8 @@ class Top(SoCCore):
         #  Ports
         # ----------------------------
         p.add_extension([
-            ("AD9174_JESD204", 0,
+            (
+                "AD9174_JESD204", 0,
                 # CLK comes from HMC7044 CLKOUT12, goes to GTX (128 MHz)
                 Subsignal("clk_p", Pins("FMC1_HPC:GBTCLK0_M2C_C_P")),
                 Subsignal("clk_n", Pins("FMC1_HPC:GBTCLK0_M2C_C_N")),
@@ -194,7 +193,8 @@ class Top(SoCCore):
                 Subsignal("sysref_p", Pins("FMC1_HPC:LA00_CC_P"), IOStandard("LVDS")),
                 Subsignal("sysref_n", Pins("FMC1_HPC:LA00_CC_N"), IOStandard("LVDS"))
             ),
-            ("AD9174_SPI", 0,
+            (
+                "AD9174_SPI", 0,
                 # FMC_CS1 (AD9174), FMC_CS2 (HMC7044)
                 Subsignal("cs_n", Pins("FMC1_HPC:LA04_N FMC1_HPC:LA05_P")),
                 Subsignal("miso", Pins("FMC1_HPC:LA04_P"), Misc("PULLUP TRUE")),
@@ -264,8 +264,10 @@ class Top(SoCCore):
         #  Application layer
         # ----------------------------
         # self.submodules.sample_gen = SampleGen(self, settings, depth=4096)
+        self.submodules.trigger = TriggerGen(
+            ext_trig_in=p.request('user_sma_gpio_p'))
         self.submodules.sample_gen = SampleGenPulse(
-            self, settings, depth=8192, ext_trig_in=p.request('user_sma_gpio_p'))
+            self, settings, depth=8192, wfm_trigger=self.trigger.wfm_trigger)
         self.comb += [
             self.core.sink.eq(self.sample_gen.source)
         ]
@@ -348,7 +350,6 @@ def main():
         soc = Top(vc707.Platform(), int(args.f_dsp))
         builder = Builder(soc, **builder_argdict(args))
         builder.build(run=args.build)
-
 
 
 if __name__ == "__main__":
