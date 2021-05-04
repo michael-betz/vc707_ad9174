@@ -67,7 +67,8 @@ class TriggerGen(Module, AutoCSR):
 
 class SampleGenPulse(Module, AutoCSR):
     def __init__(self, soc, settings, depth=256,
-                 wfm_trigger=None, adr_offset=0x10000000, idx=0):
+                 wfm_trigger=None, adr_offset=0x10000000,
+                 idx=0, clock_domain="jesd"):
         '''
         registers:
         `depth`:            max. number of samples which can be stored,
@@ -138,7 +139,7 @@ class SampleGenPulse(Module, AutoCSR):
                 )
 
                 # with mode=WRITE_FIRST vivado does only do distributed RAM
-                p1 = mem.get_port(clock_domain="jesd", mode=READ_FIRST)
+                p1 = mem.get_port(clock_domain=clock_domain, mode=READ_FIRST)
                 self.specials += p1
                 # Redundant registers for (maybe) better bram timing ...
                 # TODO vivado does not want to merge them into the bram, why?
@@ -147,7 +148,6 @@ class SampleGenPulse(Module, AutoCSR):
                 self.sync.jesd += [
                     adr_.eq(adr),
                     p1.adr.eq(adr_),
-
                     b_ram_out.eq(p1.dat_r),
                     conv[n_mem * 32: (n_mem + 1) * 32].eq(b_ram_out)
                 ]

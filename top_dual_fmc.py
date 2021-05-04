@@ -28,8 +28,9 @@ from sys import path
 path.append("spi")
 from ad9174 import Ad9174Settings
 
+
 class CRG(Module, AutoCSR):
-    def __init__(self, settings, f_dsp, p, serd_pads, add_rst=[]):
+    def __init__(self, settings, f_dsp, p, serd_pads_list, add_rst=[]):
         '''
         f_dsp = rate at which DSP datapath is clocked (jesd clock domain) [Hz]
         add_rst = additional reset signals for sys_clk
@@ -56,28 +57,67 @@ class CRG(Module, AutoCSR):
 
         rst_sum = Signal()
         self.comb += rst_sum.eq(reduce(or_, add_rst))
-
-        # Handle the GTX clock input
-        self.refclk0 = Signal()
-        self.specials += Instance(
-            "IBUFDS_GTE2",
-            i_CEB=0,
-            i_I=serd_pads.clk_p,
-            i_IB=serd_pads.clk_n,
-            o_O=self.refclk0
-        )
-        self.clock_domains.cd_jesd = ClockDomain()
-
         self.specials += [
-            AsyncResetSynchronizer(self.cd_sys, rst_sum),
-            AsyncResetSynchronizer(self.cd_jesd, ResetSignal('sys')),
-            Instance("BUFG", i_I=self.refclk0, o_O=self.cd_jesd.clk)
+            AsyncResetSynchronizer(self.cd_sys, rst_sum)
         ]
 
-        # Add a frequency counter to `cd_jesd` (160 MHz) measures in [Hz]
+        # ----------------------------
+        # JESD GTXREF clock
+        # ----------------------------
+        self.refclk1 = Signal()
+        self.refclk2 = Signal()
+        self.refclks = [self.refclk1, self.refclk2]
+
+        # ----------------------------
+        # SYSREF
+        # ----------------------------
+        self.j_ref1 = Signal()
+        self.j_ref2 = Signal()
+        self.j_refs = [self.j_ref1, self.j_ref2]
+
+        # ----------------------------
+        # DSP clock
+        # ----------------------------
+        self.clock_domains.cd_jesd = ClockDomain()
+        self.clock_domains.cd_jesd2 = ClockDomain()
+        self.cd_jesds = [self.cd_jesd, self.cd_jesd2]
+        self.j_clks = [self.cd_jesd.clk, self.cd_jesd2.clk]
+
+        for idx, serd_pads in enumerate(serd_pads_list):
+            # Handle the GTX clock input
+            self.specials += Instance(
+                "IBUFDS_GTE2",
+                i_CEB=0,
+                i_I=serd_pads.clk_p,
+                i_IB=serd_pads.clk_n,
+                o_O=self.refclks[idx]
+            )
+            self.specials += DifferentialInput(
+                serd_pads.sysref_p,
+                serd_pads.sysref_n,
+                self.j_refs[idx]
+            )
+
+            self.specials += [
+                AsyncResetSynchronizer(self.cd_jesds[idx], ResetSignal('sys')),
+                Instance("BUFG", i_I=self.refclks[idx], o_O=self.j_clks[idx])
+            ]
+
         self.submodules.f_jesd = freqmeter.FreqMeter(
             self.sys_clk_freq,
             clk=ClockSignal('jesd')
+        )
+        self.submodules.f_jesd2 = freqmeter.FreqMeter(
+            self.sys_clk_freq,
+            clk=ClockSignal('jesd2')
+        )
+        self.submodules.f_ref1 = freqmeter.FreqMeter(
+            self.sys_clk_freq,
+            clk=self.j_ref1
+        )
+        self.submodules.f_ref2 = freqmeter.FreqMeter(
+            self.sys_clk_freq,
+            clk=self.j_ref2
         )
 
 
@@ -138,8 +178,8 @@ class Top(SoCCore):
         print(settings)
 
         for c in [
-            "control", "dna", "crg", "f_ref", "spi_fmc1", "spi_fmc2", "sample_gen", "prbs_gen"
-        ]:
+                "control", "dna", "crg",
+                "spi_fmc1", "spi_fmc2", "sample_gen"]:
             self.add_csr(c)
 
         for i in range(2 * settings.L):
@@ -226,7 +266,7 @@ class Top(SoCCore):
 
         # use FMC1 to receive JESD_CLK (312.5MHz) and SYSREF (3.9MHz)
         self.submodules.crg = CRG(
-            settings, f_dsp, p, serd_pads_fmc1, [self.ctrl.reset]
+            settings, f_dsp, p, [serd_pads_fmc1, serd_pads_fmc2], [self.ctrl.reset]
         )
 
         # ----------------------------
@@ -255,7 +295,7 @@ class Top(SoCCore):
         for name, fmc in fmc_info.items():
             for ix in range((settings.L) // 4):
                 qpll = GTXQuadPLL(
-                    self.crg.refclk0,
+                    self.crg.refclks[ix],
                     self.crg.tx_clk_freq,
                     self.crg.gtx_line_freq
                 )
@@ -285,6 +325,14 @@ class Top(SoCCore):
                 fmc['phys'].append(phy)
                 setattr(self, 'phy{}'.format(fmc['id'] + j), phy)
 
+        # ----------------------------
+        # Asynchronous clock between two boards
+        # ----------------------------
+        p.add_false_path_constraints(
+            self.crg.cd_jesd.clk,
+            self.crg.cd_jesd2.clk
+        )
+
         self.submodules.core1 = LiteJESD204BCoreTX(
             fmc_info['fmc1']['phys'],
             settings
@@ -308,6 +356,9 @@ class Top(SoCCore):
             serd_pads_fmc2.jsync0_p, serd_pads_fmc2.jsync0_n, jsync_fmc2
         )
 
+        self.core1.register_jref(self.crg.j_ref1)
+        self.core2.register_jref(self.crg.j_ref2)
+
         # ----------------------------
         # Combine two SYNC_OUT signals
         # ----------------------------
@@ -318,20 +369,6 @@ class Top(SoCCore):
         self.comb += p.request('user_led').eq(jsync)
 
         # ----------------------------
-        # Only use FMC1 for SYSREF
-        # ----------------------------
-        j_ref = Signal()
-        self.specials += DifferentialInput(
-            serd_pads_fmc1.sysref_p, serd_pads_fmc1.sysref_n, j_ref
-        )
-        self.core1.register_jref(j_ref)
-        self.core2.register_jref(j_ref)
-        self.submodules.f_ref = freqmeter.FreqMeter(
-            self.sys_clk_freq,
-            clk=j_ref
-        )
-
-        # ----------------------------
         #  Application layer
         # ----------------------------
         # self.submodules.sample_gen = SampleGen(self, settings, depth=4096)
@@ -340,12 +377,12 @@ class Top(SoCCore):
         self.submodules.sample_gen1 = SampleGenPulse(
             self, settings, depth=8192,
             wfm_trigger=self.trigger.wfm_trigger,
-            idx=0,
+            idx=0, clock_domain='jesd',
             adr_offset=0x10000000)
         self.submodules.sample_gen2 = SampleGenPulse(
             self, settings, depth=8192,
             wfm_trigger=self.trigger.wfm_trigger,
-            idx=1,
+            idx=1, clock_domain='jesd2',
             adr_offset=0x10100000)
         self.comb += self.core1.sink.eq(self.sample_gen1.source)
         self.comb += self.core2.sink.eq(self.sample_gen2.source)
