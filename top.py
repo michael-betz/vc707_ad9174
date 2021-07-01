@@ -208,7 +208,7 @@ class Top(SoCCore):
         serd_pads = p.request("AD9174_JESD204")
 
         self.submodules.crg = CRG(
-            settings, f_dsp, p, serd_pads, [self.ctrl.reset]
+            settings, f_dsp, p, serd_pads, [self.ctrl.soc_rst]
         )
 
         # ----------------------------
